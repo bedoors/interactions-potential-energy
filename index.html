@@ -1,0 +1,1902 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Interactions and Potential Energy: Chapter 10 simulations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap">
+<style>
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+:root{
+  --bg:#F1F7F6; --surface:#FFFFFF; --nav:#E3F0EE; --ink:#132E2D; --ink-2:#2E4C4A; --muted:#5B7674;
+  --rule:#CCDFDC; --rule-2:#E4EEEC; --accent:#0C6E74; --accent-ink:#FFFFFF; --accent-soft:#D5EBE8; --focus:#D99A00;
+  --force:#C2185B; --vel:#2E8B3E; --disp:#2B5EC4; --W:#7A3E9D; --K:#0E8C8A; --U:#C08A00; --Eth:#E2621F; --qc:#C8283C;
+  --vecA:#2B5EC4; --vecB:#B4235F;
+  --obj:#CFDCD9; --obj-2:#A9BEBA; --obj-stroke:#2F4847; --ground:#6C8683; --snow:#EEF4F6; --water:#7FB4DA; --rock:#B9A893; --wood:#8A6440;
+  --ok:#1E8A4C; --bad:#C8283C; --skin:#F3C7A1; --skin-ln:#7B4B2F; --trans:#E58E2F; --sysbox:#B5653D;
+  --font-ui:"Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-math:"STIX Two Text", "STIX Two Math", Cambria, "Cambria Math", "Times New Roman", Times, serif;
+  --arrow:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 8' preserveAspectRatio='none'%3E%3Cpath d='M1 4H21.5M17.5 1.2L22.5 4L17.5 6.8' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  color-scheme:light;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0D1C1E; --surface:#12272A; --nav:#0F2326; --ink:#E3EFED; --ink-2:#C3D6D3; --muted:#93AEAA;
+    --rule:#28494D; --rule-2:#1B3538; --accent:#4FC3BE; --accent-ink:#04201F; --accent-soft:#18403F; --focus:#F2C14E;
+    --force:#FF5C8D; --vel:#5CCF77; --disp:#72A6FF; --W:#BE8EF2; --K:#3AD0C5; --U:#F2C14E; --Eth:#FF9548; --qc:#FF6B7A;
+    --vecA:#72A6FF; --vecB:#FF6FA0;
+    --obj:#3B5558; --obj-2:#4F6B6E; --obj-stroke:#BCD2CE; --ground:#86A29E; --snow:#203338; --water:#2D5B7E; --rock:#5E5446; --wood:#B08A62;
+    --ok:#5CCF77; --bad:#FF6B7A; --trans:#F2A65A; --sysbox:#D9905F;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0D1C1E; --surface:#12272A; --nav:#0F2326; --ink:#E3EFED; --ink-2:#C3D6D3; --muted:#93AEAA;
+  --rule:#28494D; --rule-2:#1B3538; --accent:#4FC3BE; --accent-ink:#04201F; --accent-soft:#18403F; --focus:#F2C14E;
+  --force:#FF5C8D; --vel:#5CCF77; --disp:#72A6FF; --W:#BE8EF2; --K:#3AD0C5; --U:#F2C14E; --Eth:#FF9548; --qc:#FF6B7A;
+  --vecA:#72A6FF; --vecB:#FF6FA0;
+  --obj:#3B5558; --obj-2:#4F6B6E; --obj-stroke:#BCD2CE; --ground:#86A29E; --snow:#203338; --water:#2D5B7E; --rock:#5E5446; --wood:#B08A62;
+  --ok:#5CCF77; --bad:#FF6B7A; --trans:#F2A65A; --sysbox:#D9905F;
+  color-scheme:dark;
+}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{height:100%;margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-ui);font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+em{font-style:italic}
+
+/* ---------- app frame ---------- */
+.app{height:100%;display:grid;grid-template-columns:228px minmax(0,1fr)}
+.app.compact{grid-template-columns:60px minmax(0,1fr)}
+.toc{background:var(--nav);border-right:1px solid var(--rule);display:flex;flex-direction:column;min-height:0;overflow-y:auto}
+.toc-brand{padding:20px 16px 12px 18px}
+.toc-brand .ch{font-size:13px;color:var(--muted);margin:0}
+.toc-brand .bt{font-family:var(--font-math);font-weight:600;font-size:21px;line-height:1.15;margin:3px 0 0;color:var(--ink)}
+.toc-list{list-style:none;margin:0;padding:6px 8px;display:flex;flex-direction:column;gap:2px}
+.toc-btn{display:flex;gap:10px;align-items:baseline;width:100%;text-align:left;border:0;background:transparent;color:var(--ink-2);font-size:15.5px;padding:8px 10px;border-radius:6px;cursor:pointer;line-height:1.25}
+.toc-btn .n{font-variant-numeric:tabular-nums;color:var(--muted);min-width:1.35em;text-align:right;flex:none}
+.toc-btn:hover{background:var(--accent-soft)}
+.toc-btn[aria-selected="true"]{background:var(--accent);color:var(--accent-ink);font-weight:700}
+.toc-btn[aria-selected="true"] .n{color:inherit}
+.toc-foot{margin-top:auto;padding:12px 12px 16px;display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--muted)}
+.toc-foot kbd{font-family:var(--font-ui);font-size:12px;border:1px solid var(--rule);border-bottom-width:2px;border-radius:4px;padding:0 5px;background:var(--surface);color:var(--ink-2)}
+.collapse{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--rule);background:var(--surface);border-radius:6px;padding:6px 10px;cursor:pointer;color:var(--ink-2);font-size:13.5px;align-self:flex-start}
+.collapse svg{width:16px;height:16px}
+.app.compact .toc-brand,.app.compact .toc-btn .t,.app.compact .keys{display:none}
+.app.compact .toc-btn{justify-content:center;padding:9px 0}
+.app.compact .toc-btn .n{text-align:center;min-width:0}
+.app.compact .collapse span{display:none}
+.app.compact .collapse svg{transform:scaleX(-1)}
+
+main{min-width:0;min-height:0;display:flex;flex-direction:column}
+.panel{flex:1;min-height:0;display:flex;flex-direction:column;padding:18px 24px 16px;gap:12px}
+.p-head{display:flex;gap:12px 24px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+.p-titles{min-width:0;flex:1 1 520px}
+.p-title{font-family:var(--font-math);font-weight:600;font-size:31px;line-height:1.1;margin:0;color:var(--ink)}
+.p-lede{margin:6px 0 0;color:var(--ink-2);max-width:78ch;font-size:16.5px}
+.p-right{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.p-qs{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.chip-q{border:1.5px solid var(--qc);color:var(--qc);background:transparent;border-radius:999px;padding:5px 12px;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap}
+.chip-q:hover{background:color-mix(in srgb,var(--qc) 10%,transparent)}
+.chip-q.rq{border-color:var(--ink-2);color:var(--ink-2)}
+.chip-q.rq:hover{background:var(--accent-soft)}
+.modes{margin-top:12px}
+.p-body{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 336px;gap:20px}
+.stage-col{min-height:0;display:flex;flex-direction:column;gap:8px}
+.stage{flex:1;min-height:0;background:var(--surface);border:1px solid var(--rule);border-radius:8px;position:relative;overflow:hidden}
+.stage>svg{position:absolute;inset:0;width:100%;height:100%;display:block;user-select:none;-webkit-user-select:none}
+.stage-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;min-height:40px}
+.caption{margin:0;color:var(--muted);font-size:14.5px;max-width:110ch}
+.side{min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:0;padding:2px 6px 8px 2px}
+.sec{display:flex;flex-direction:column;gap:10px;padding:14px 0}
+.sec:first-child{padding-top:2px}
+.sec+.sec{border-top:1px solid var(--rule)}
+.sec h3{font-size:15px;font-weight:700;color:var(--ink-2);margin:0}
+.note{font-size:15px;color:var(--ink-2);margin:0}
+.note b{color:var(--ink)}
+.status{font-size:15px;margin:0;padding:8px 12px;border-radius:6px;background:var(--accent-soft);color:var(--ink)}
+.status.warn{background:color-mix(in srgb,var(--Eth) 16%,var(--surface))}
+
+/* ---------- controls ---------- */
+.btn{display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--accent);background:var(--surface);color:var(--accent);border-radius:8px;padding:7px 14px;font-weight:700;font-size:15px;cursor:pointer;line-height:1.2}
+.btn:hover{background:var(--accent-soft)}
+.btn.primary{background:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.ghost{border-color:transparent;background:transparent;color:var(--ink-2)}
+.btn svg{width:15px;height:15px;flex:none}
+.icon-btn{border:0;background:transparent;border-radius:6px;padding:6px;cursor:pointer;color:var(--ink-2);display:inline-flex}
+.icon-btn svg{width:20px;height:20px}
+.icon-btn:hover{background:var(--accent-soft)}
+.seg{display:inline-flex;flex-wrap:wrap;border:1.5px solid var(--accent);border-radius:9px;overflow:hidden;background:var(--surface)}
+.seg-b{border:0;background:transparent;padding:7px 14px;font-size:15px;cursor:pointer;color:var(--accent);font-weight:700;border-right:1.5px solid var(--accent)}
+.seg-b:last-child{border-right:0}
+.seg-b[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.seg-b:hover:not([aria-pressed="true"]){background:var(--accent-soft)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1.5px solid var(--rule);background:var(--surface);border-radius:999px;padding:5px 12px;font-size:14px;cursor:pointer;color:var(--ink);line-height:1.25}
+.chip:hover{border-color:var(--accent)}
+.chip[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.plist{display:flex;flex-direction:column;gap:4px}
+.plist button{display:flex;justify-content:space-between;gap:10px;align-items:baseline;text-align:left;border:1.5px solid transparent;background:transparent;border-radius:7px;padding:7px 10px;cursor:pointer;color:var(--ink);font-size:15.5px}
+.plist button:hover{background:var(--accent-soft)}
+.plist button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);font-weight:700}
+.plist .tag{font-size:12.5px;color:var(--muted);font-weight:400;white-space:nowrap}
+.ctl{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:baseline}
+.ctl-l{font-size:15px;color:var(--ink-2)}
+.ctl-l i,.ctl-l .m{font-family:var(--font-math);font-size:17px}
+.ctl-v{font-variant-numeric:tabular-nums;font-weight:700;font-size:15px;color:var(--ink)}
+.ctl input[type=range]{grid-column:1/-1}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:28px;background:transparent;margin:0;cursor:pointer;--p:50%}
+input[type=range]::-webkit-slider-runnable-track{height:5px;border-radius:3px;background:linear-gradient(to right,var(--accent) var(--p),var(--rule) var(--p))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--accent);border:3px solid var(--surface);box-shadow:0 0 0 1.5px var(--accent);margin-top:-7.5px}
+input[type=range]::-moz-range-track{height:5px;border-radius:3px;background:var(--rule)}
+input[type=range]::-moz-range-progress{height:5px;border-radius:3px;background:var(--accent)}
+input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;background:var(--accent);border:3px solid var(--surface);box-shadow:0 0 0 1.5px var(--accent)}
+input[type=range]:focus-visible{outline:none}
+input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 4px var(--focus)}
+input[type=range]:focus-visible::-moz-range-thumb{box-shadow:0 0 0 4px var(--focus)}
+input[type=range]:disabled{opacity:.45;cursor:not-allowed}
+.scrub{flex:1 1 160px;max-width:340px}
+.check{display:flex;gap:8px;align-items:center;font-size:15px;color:var(--ink-2);cursor:pointer}
+.check input{width:18px;height:18px;accent-color:var(--accent)}
+.live{margin-left:auto;display:flex;gap:6px 18px;flex-wrap:wrap;font-family:var(--font-math);font-size:18px;font-variant-numeric:tabular-nums lining-nums;color:var(--ink)}
+.live .lv{white-space:nowrap}
+.hint{font-size:13.5px;color:var(--muted)}
+
+/* ---------- math ---------- */
+.m,.eq{font-family:var(--font-math)}
+.m{font-size:1.08em}
+.eq{font-size:20px;line-height:1.6;color:var(--ink);margin:0}
+.eq.big{font-size:23px}
+.eq.small{font-size:18px}
+.eq i,.m i{font-style:italic}
+.eq .n{font-variant-numeric:lining-nums tabular-nums;font-weight:600}
+.eq sub,.m sub,.eq sup,.m sup{font-size:.68em;line-height:0}
+.eq sub,.m sub{vertical-align:-.28em}
+.eq sup,.m sup{vertical-align:.48em}
+.vec{position:relative;display:inline-block}
+.vec::after{content:"";position:absolute;left:.16em;right:-.1em;top:-.22em;height:.34em;background:currentColor;-webkit-mask:var(--arrow) no-repeat center/100% 100%;mask:var(--arrow) no-repeat center/100% 100%}
+.vec.lo::after{top:-.02em}
+.rad{border-top:1px solid currentColor;padding:0 .08em;margin-left:.02em}
+.qK{color:var(--K)} .qU{color:var(--U)} .qE{color:var(--Eth)} .qW{color:var(--W)} .qF{color:var(--force)} .qv{color:var(--vel)} .qd{color:var(--disp)} .qA{color:var(--vecA)} .qB{color:var(--vecB)}
+.eqs{display:flex;flex-direction:column;gap:2px}
+.tbl{width:100%;border-collapse:collapse;font-size:14.5px}
+.tbl th{font-weight:700;text-align:left;color:var(--ink-2);border-bottom:1.5px solid var(--rule);padding:5px 6px;font-size:13.5px}
+.tbl td{border-bottom:1px solid var(--rule-2);padding:6px 6px;vertical-align:top}
+.tbl tr.on td{background:var(--accent-soft)}
+.tbl tr.on td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
+.tbl .m{font-size:16.5px;white-space:nowrap}
+.tbl td.r,.tbl th.r{text-align:right}
+.tbl input{width:58px;border:1px solid var(--rule);border-radius:5px;padding:3px 5px;background:var(--surface);font-variant-numeric:tabular-nums}
+
+/* ---------- svg ---------- */
+svg text{font-family:var(--font-ui)}
+.ml text{font-family:var(--font-math);fill:currentColor}
+.mt{font-family:var(--font-math);font-size:21px;fill:var(--ink)}
+.vec-arrow{stroke:currentColor;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.svg-ui{font-size:18px;fill:var(--ink-2)}
+.svg-ui.strong{font-weight:700;fill:var(--ink)}
+.svg-ui.muted{fill:var(--muted)}
+.svg-ui.small{font-size:15.5px}
+.svg-ui.big{font-size:22px;font-weight:700;fill:var(--ink)}
+.svg-ui.flow{font-family:var(--font-math);font-size:22px;fill:var(--ink)}
+.tick{font-size:14.5px;fill:var(--muted);font-variant-numeric:tabular-nums}
+.gridl{stroke:var(--rule-2);stroke-width:1}
+.gridl.strong{stroke:var(--rule)}
+.axisl{stroke:var(--muted);stroke-width:1.6}
+.ground{stroke:var(--ground);stroke-width:3;stroke-linecap:round}
+.hatch-line{stroke:var(--ground);stroke-width:1.4}
+.obj{fill:var(--obj);stroke:var(--obj-stroke);stroke-width:2}
+.obj2{fill:var(--obj-2);stroke:var(--obj-stroke);stroke-width:2}
+.limb{stroke:var(--obj-stroke);stroke-width:4;stroke-linecap:round;fill:none}
+.thin{stroke:var(--obj-stroke);stroke-width:2;fill:none}
+.ghost{opacity:.33}
+.sys-box{fill:none;stroke:var(--accent);stroke-width:2;stroke-dasharray:9 6}
+.zone{fill:var(--force);fill-opacity:.07;stroke:var(--force);stroke-opacity:.4;stroke-dasharray:6 5}
+.bar.K{fill:var(--K)} .bar.U{fill:var(--U)} .bar.E{fill:var(--Eth)} .bar.W{fill:var(--W)} .bar.F{fill:var(--force)} .bar.n{fill:var(--muted)}
+.bar-base{stroke:var(--ink-2);stroke-width:2}
+.bar-val{font-size:16px;fill:var(--ink);font-variant-numeric:tabular-nums;font-weight:700}
+.bar-op{font-family:var(--font-math);font-size:30px;fill:var(--ink-2)}
+.handle{fill:currentColor;fill-opacity:.12;stroke:currentColor;stroke-width:2;cursor:grab}
+.handle:hover,.handle.dragging{fill-opacity:.3}
+.handle.dragging{cursor:grabbing}
+.qradio{cursor:pointer}
+.qr-ring{fill:var(--surface);stroke:var(--accent);stroke-width:2.5}
+.qr-dot{fill:var(--accent);opacity:0}
+.qradio[aria-checked="true"] .qr-dot{opacity:1}
+.qradio:hover .qr-ring{fill:var(--accent-soft)}
+.qradio:focus{outline:none}
+.qradio:focus-visible .qr-ring{stroke:var(--focus);stroke-width:4}
+.qr-mark{fill:none;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}
+.qr-mark.good{stroke:var(--ok)}
+.qr-mark.bad{stroke:var(--bad)}
+.status.good{background:color-mix(in srgb,var(--ok) 16%,var(--surface))}
+.status.bad{background:color-mix(in srgb,var(--bad) 12%,var(--surface))}
+.pw-item{cursor:zoom-in;outline:none}
+.wk-list{margin:0;padding-left:1.3em;font-size:15px;color:var(--ink-2)}
+.wk-list li{margin:2px 0}
+.mg-part{cursor:pointer;transition:opacity .2s}
+.mg-box{fill:none;stroke:var(--sysbox);stroke-width:3}
+.mg-word{font-size:22px;fill:var(--ink)}
+.mg-dot.tr{fill:var(--trans)}
+.mg-dot.w{fill:var(--W)}
+.c-tr{color:var(--trans)}
+.mg-steps{margin:0;padding:0;list-style:none;counter-reset:st;display:flex;flex-direction:column;gap:3px}
+.mg-steps li{counter-increment:st}
+.mg-steps button{display:flex;gap:10px;width:100%;text-align:left;border:1.5px solid transparent;background:transparent;border-radius:7px;padding:6px 10px;cursor:pointer;color:var(--ink);font-size:15px;line-height:1.3}
+.mg-steps button::before{content:counter(st);min-width:1.2em;color:var(--muted);font-variant-numeric:tabular-nums}
+.mg-steps button:hover{background:var(--accent-soft)}
+.mg-steps button[aria-current="step"]{border-color:var(--accent);background:var(--accent-soft);font-weight:700}
+.mg-steps button i,.sec h3 i{font-family:var(--font-math);font-size:1.06em}
+@media (prefers-reduced-motion:reduce){.mg-part{transition:none}}
+.pw-lab{transition:transform .16s ease-out}
+.pw-card{fill:var(--surface);stroke:var(--rule);stroke-width:1.5;opacity:0;transition:opacity .16s}
+.pw-item:focus-visible .pw-card{stroke:var(--focus);stroke-width:3}
+@media (prefers-reduced-motion:reduce){.pw-lab,.pw-card{transition:none}}
+.dash{stroke-dasharray:6 5}
+.trace{fill:none;stroke-width:3.2;stroke-linejoin:round;stroke-linecap:round}
+.spring{fill:none;stroke:var(--obj-stroke);stroke-width:2.6;stroke-linejoin:round}
+.wall{fill:url(#none);stroke:none}
+.snow{fill:var(--snow);stroke:none}
+.water{fill:var(--water)}
+.rock{fill:var(--rock);stroke:var(--obj-stroke);stroke-width:2}
+.wood-stroke{stroke:var(--wood);stroke-width:14;stroke-linecap:round;fill:none}
+.band{stroke:#B5482F;stroke-width:4;stroke-linecap:round}
+.arm{fill:#E4E5E6}
+.arm-ln{fill:none;stroke:#262626;stroke-width:1.2}
+.skin{fill:var(--skin);stroke:var(--skin-ln);stroke-width:2.2;stroke-linejoin:round}
+.wband{fill:var(--accent);stroke:var(--skin-ln);stroke-width:2}
+.skin-crease{fill:none;stroke:var(--skin-ln);stroke-width:1.4;stroke-linecap:round;opacity:.55}
+.pouch{fill:#6B4A32}
+.dim{stroke:var(--muted);stroke-width:1.5;fill:none}
+.area-pos{fill:var(--W);fill-opacity:.26}
+.area-neg{fill:url(#none);}
+.marker{fill:var(--surface);stroke:currentColor;stroke-width:3}
+.c-F{color:var(--force)} .c-v{color:var(--vel)} .c-d{color:var(--disp)} .c-W{color:var(--W)} .c-K{color:var(--K)} .c-U{color:var(--U)} .c-E{color:var(--Eth)}
+.c-ink{color:var(--ink)} .c-mut{color:var(--muted)} .c-A{color:var(--vecA)} .c-B{color:var(--vecB)} .c-acc{color:var(--accent)}
+.c-vl{color:#86E39A}
+.arw line{stroke:currentColor}
+.arw>path{fill:currentColor}
+
+/* ---------- question dialog ---------- */
+dialog.qd{border:0;padding:0;border-radius:14px;width:min(800px,94vw);max-height:92vh;background:var(--surface);color:var(--ink);box-shadow:0 24px 70px rgba(0,0,0,.32)}
+dialog.qd::backdrop{background:rgba(6,22,24,.58)}
+.qd-in{padding:24px 28px 22px;display:flex;flex-direction:column;gap:14px}
+.qd-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.qd-title{font-family:var(--font-math);color:var(--qc);font-weight:700;font-size:28px;margin:0}
+.qd-title.rq{color:var(--ink)}
+.qd-prompt{font-size:20px;line-height:1.45;margin:0}
+.qd-prompt i{font-family:var(--font-math);font-size:1.06em}
+.qd-fig{display:flex;justify-content:center}
+.qd-fig svg{width:100%;max-width:640px;height:auto}
+.qd-opts{display:flex;flex-direction:column;gap:7px}
+.qd-opt{display:flex;gap:12px;align-items:baseline;text-align:left;border:1.5px solid var(--rule);background:var(--surface);padding:9px 14px;border-radius:9px;font-size:19px;color:var(--ink);cursor:pointer;line-height:1.35}
+.qd-opt:hover{border-color:var(--accent)}
+.qd-opt .L{font-weight:700;color:var(--accent);min-width:1.5em}
+.qd-opt .o i{font-family:var(--font-math);font-size:1.06em}
+.qd-opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+.qd-opt.correct{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 15%,var(--surface))}
+.qd-opt.correct .L{color:var(--ok)}
+.qd-opt.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 9%,var(--surface))}
+.qd-opt[aria-disabled="true"]{cursor:default}
+.qd-explain{border-left:4px solid var(--ok);padding:4px 0 4px 16px;font-size:18px;line-height:1.5}
+.qd-explain p{margin:0 0 6px}
+.qd-explain i{font-family:var(--font-math);font-size:1.06em}
+.qd-ans{font-weight:700;color:var(--ok)}
+.qd-foot{display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding-top:4px}
+.qd-foot .btn.ghost{margin-left:auto}
+.qtable{border-collapse:collapse;font-size:17px;margin:2px auto}
+.qtable th,.qtable td{padding:5px 14px;border-bottom:1px solid var(--rule-2);text-align:center}
+.qtable th{color:var(--ink-2);font-size:15px}
+
+/* ---------- review page ---------- */
+.p-page{flex:1;min-height:0;overflow-y:auto;padding:4px 2px 24px}
+.sum-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 36px;max-width:1500px}
+.sum-col h3{font-family:var(--font-math);font-size:23px;font-weight:600;margin:4px 0 6px;color:var(--ink)}
+.sum-item{padding:12px 0;border-top:1px solid var(--rule)}
+.sum-item h4{font-size:15.5px;margin:0 0 4px;color:var(--ink)}
+.sum-item p{margin:4px 0;font-size:15px;color:var(--ink-2)}
+.sum-item .eq{font-size:21px}
+.sum-item a{font-size:14px;color:var(--accent);font-weight:700;text-decoration:none}
+.sum-item a:hover{text-decoration:underline}
+.rq-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:20px 28px;max-width:1500px}
+.rq{border-top:2px solid var(--rule);padding-top:12px;display:flex;flex-direction:column;gap:8px}
+.rq h4{font-family:var(--font-math);margin:0;font-size:20px}
+.rq h4.qc{color:var(--qc)}
+.rq p.pr{margin:0;font-size:16.5px}
+.rq .qd-opt{font-size:16px;padding:6px 12px}
+.rq .row{display:flex;gap:8px;flex-wrap:wrap}
+.rq .qd-explain{font-size:15.5px}
+
+@media (min-width:1600px){
+  body{font-size:17px}
+  .p-body{grid-template-columns:minmax(0,1fr) 360px}
+}
+@media (max-width:1179px){
+  .app,.app.compact{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr)}
+  .toc{flex-direction:row;align-items:center;border-right:0;border-bottom:1px solid var(--rule);overflow-x:auto;overflow-y:hidden}
+  .toc-brand,.app.compact .toc-brand{display:block;padding:8px 6px 8px 16px;flex:none}
+  .toc-brand .ch{display:none}
+  .toc-brand .bt{font-size:16px;white-space:nowrap;margin:0}
+  .toc-list{flex-direction:row;padding:6px 8px;gap:2px}
+  .toc-btn,.app.compact .toc-btn{white-space:nowrap;padding:7px 10px;justify-content:flex-start}
+  .app.compact .toc-btn .t{display:inline}
+  .toc-foot{display:none}
+  .panel{padding:14px 18px}
+  .p-body{grid-template-columns:minmax(0,1fr) 300px}
+  .sum-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:899px){
+  html,body{height:auto}
+  .app{height:auto;display:block}
+  .toc{position:sticky;top:env(safe-area-inset-top,0px);z-index:10}
+  body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:11;background:var(--nav)}
+  .panel{padding:14px 14px 30px}
+  .p-title{font-size:26px}
+  .p-right{align-items:flex-start}
+  .p-qs{justify-content:flex-start}
+  .p-body{display:flex;flex-direction:column}
+  .stage{flex:none;aspect-ratio:1000/560}
+  .side{overflow:visible}
+  .sum-grid{grid-template-columns:minmax(0,1fr)}
+  .rq-list{grid-template-columns:minmax(0,1fr)}
+  .p-page{overflow:visible}
+}
+@media (max-height:800px) and (min-width:900px){
+  .panel{padding:10px 18px 10px;gap:8px}
+  .p-title{font-size:25px}
+  .p-lede{font-size:14.5px;margin-top:3px;line-height:1.38}
+  .modes{margin-top:7px}
+  .seg-b{padding:5px 11px;font-size:14px}
+  .chip-q{padding:3px 10px;font-size:13px}
+  .caption{font-size:13px}
+  .stage-bar{min-height:34px;gap:8px}
+  .btn{padding:5px 12px}
+  .sec{padding:10px 0;gap:8px}
+  .toc-brand{padding:12px 14px 8px 16px}
+  .toc-btn{padding:6px 10px;font-size:14.5px}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+/* ================= Chapter 10: larger type for the classroom ================= */
+:root{--USp:#8C5A2B;--p1:#2563EB;--p2:#D9730D;--p3:#1E9E52;--p4:#8B3FB8}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--USp:#D9A774;--p1:#6EA0FF;--p2:#F5A04A;--p3:#4FD08A;--p4:#C58AF0}}
+:root[data-theme="dark"]{--USp:#D9A774;--p1:#6EA0FF;--p2:#F5A04A;--p3:#4FD08A;--p4:#C58AF0}
+.bar.USp{fill:var(--USp)} .qUs{color:var(--USp)} .c-Us{color:var(--USp)}
+body{font-size:18px}
+.toc-brand .ch{font-size:15px} .toc-brand .bt{font-size:23px;line-height:1.2}
+.toc-btn{font-size:17.5px;padding-top:9px;padding-bottom:9px}
+.toc-foot{font-size:14px}
+.p-title{font-size:36px}
+.p-lede{font-size:19px;line-height:1.5;max-width:82ch}
+.chip-q{font-size:16px}
+.caption{font-size:17px;line-height:1.5}
+.sec h3{font-size:19.5px}
+.note,.status{font-size:18px;line-height:1.5}
+.btn,.seg-b{font-size:17px}
+.chip{font-size:16.5px}
+.plist button{font-size:17.5px}
+.plist .tag{font-size:14.5px}
+.ctl-l{font-size:18px} .ctl-l i,.ctl-l .m{font-size:20px} .ctl-v{font-size:18px}
+.check{font-size:17.5px}
+.live{font-size:22px}
+.hint{font-size:16.5px;line-height:1.45}
+.eq{font-size:25px} .eq.big{font-size:30px} .eq.small{font-size:22px}
+.tbl{font-size:17px} .tbl th{font-size:15.5px} .tbl .m{font-size:19.5px}
+.svg-ui{font-size:27px} .svg-ui.small{font-size:24px} .svg-ui.big{font-size:33px}
+.tick{font-size:22px}
+.bar-val{font-size:24px} .bar-op{font-size:40px}
+.qd-title{font-size:32px} .qd-prompt{font-size:23px} .qd-opt{font-size:22px} .qd-explain{font-size:21px}
+.sum-col h3{font-size:26px} .sum-item h4{font-size:19px} .sum-item p{font-size:17.5px} .sum-item .eq{font-size:25px} .sum-item a{font-size:16.5px}
+.rq h4{font-size:22px} .rq p.pr{font-size:19px} .rq .qd-opt{font-size:18px} .rq .qd-explain{font-size:17.5px}
+.steps{margin:4px 0 0;padding-left:1.4em;font-size:17.5px;line-height:1.5}
+.steps li{margin:3px 0}
+.p-lede .m,.note .m,.status .m,.hint .m,.steps .m,.caption .m,.qd-prompt .m,.qd-explain .m{white-space:nowrap} .steps b{color:var(--accent)}
+@media (min-width:1180px){
+  .app{grid-template-columns:252px minmax(0,1fr)}
+  .p-body{grid-template-columns:minmax(0,1fr) 392px}
+}
+@media (min-width:1180px) and (max-width:1439px){ .p-body{grid-template-columns:minmax(0,1fr) 352px} }
+@media (max-width:1179px){ .p-title{font-size:29px} .p-lede{font-size:17.5px} .toc-btn{font-size:16px} .tbl{font-size:15.5px} .tbl .m{font-size:17.5px} }
+@media (max-width:899px){ body{font-size:17px} .p-title{font-size:27px} .eq{font-size:22px} .eq.big{font-size:26px} .live{font-size:19px} }
+
+.pdot{font-size:1.25em;line-height:0;vertical-align:-0.08em;margin-right:4px}
+.tbl tr.pc td{font-weight:700}
+
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <nav class="toc" id="toc" aria-label="Chapter 10 topics">
+    <div class="toc-brand"><p class="ch">Chapter 10</p><p class="bt">Interactions and Potential Energy</p></div>
+    <ul class="toc-list" id="toc-list" role="tablist" aria-orientation="vertical"></ul>
+    <div class="toc-foot">
+      <div class="keys"><kbd>Space</kbd> play or pause, <kbd>R</kbd> reset, <kbd>PgUp</kbd> <kbd>PgDn</kbd> change topic</div>
+      <button type="button" class="collapse" id="collapse" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3L5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Hide topic names</span></button>
+    </div>
+  </nav>
+  <main id="main"></main>
+</div>
+<dialog class="qd" id="qd" aria-labelledby="qd-title"><div class="qd-in"></div></dialog>
+<script>
+'use strict';
+/* ================= core helpers ================= */
+const NS='http://www.w3.org/2000/svg';
+const $=(s,r)=>(r||document).querySelector(s);
+function S(tag,attrs,parent){const e=document.createElementNS(NS,tag);if(attrs)for(const k in attrs){const v=attrs[k];if(v!==undefined&&v!==null&&v!==false)e.setAttribute(k,v)}if(parent)parent.appendChild(e);return e}
+function H(tag,attrs,...kids){const e=document.createElement(tag);if(attrs)for(const k in attrs){const v=attrs[k];if(v===undefined||v===null||v===false)continue;if(k==='class')e.className=v;else if(k==='html')e.innerHTML=v;else if(k==='text')e.textContent=v;else if(k.slice(0,2)==='on'&&typeof v==='function')e.addEventListener(k.slice(2),v);else e.setAttribute(k,v===true?'':v)}for(const c of kids){if(c==null||c===false)continue;e.append(c.nodeType?c:document.createTextNode(c))}return e}
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x)), lerp=(a,b,t)=>a+(b-a)*t, DEG=Math.PI/180, G=9.8;
+let _uid=0; const uid=p=>(p||'u')+(++_uid);
+const MINUS='\u2212', NB='\u00A0';
+const SUPS={'-':'⁻','0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹'};
+const sup=n=>String(n).split('').map(c=>SUPS[c]||c).join('');
+/* significant-figure formatter: 613, 5,960, 500,000, 2.00 × 10⁹ */
+function num(x,sig=3){
+  if(x==null||!isFinite(x))return '—';
+  const ax=Math.abs(x); if(ax<1e-9)return '0';
+  let s;
+  if(ax>=1e6||ax<1e-3){let e=Math.floor(Math.log10(ax));let ms=(x/Math.pow(10,e)).toFixed(sig-1);if(Math.abs(+ms)>=10){e+=1;ms=(x/Math.pow(10,e)).toFixed(sig-1)}s=ms+NB+'×'+NB+'10'+sup(e)}
+  else if(ax>=1000){s=Math.round(x).toLocaleString('en-US')}
+  else{const d=Math.max(0,sig-1-Math.floor(Math.log10(ax)));s=x.toFixed(d);if(d>0&&Math.abs(+s)>=Math.pow(10,sig))s=Math.round(x).toString()}
+  return s.replace('-',MINUS);
+}
+function fx(x,d=1){if(x==null||!isFinite(x))return '—';let v=+(+x).toFixed(d);if(Math.abs(v)<Math.pow(10,-d)/2)v=0;return v.toFixed(d).replace('-',MINUS)}
+/* value with a common power of ten: sci(2e9,9) -> 2.00 × 10⁹ */
+function sci(x,e,d=2){return (x/Math.pow(10,e)).toFixed(d).replace('-',MINUS).replace(/^−0\.00$/,'0.00')+NB+'×'+NB+'10'+sup(e)}
+const J=(x,sig)=>num(x,sig)+NB+'J';
+const paren=s=>s.startsWith(MINUS)?'('+s+')':s;
+
+const ICON={
+  play:'<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 2.6v10.8l8.6-5.4z" fill="currentColor"/></svg>',
+  pause:'<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.6h3v10.8H4zM9 2.6h3v10.8H9z" fill="currentColor"/></svg>',
+  reset:'<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.3 6.4A5 5 0 1 1 3.1 9.6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/><path d="M2.4 2.8v3.9h3.9" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  x:'<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>'
+};
+
+/* ---------- math labels in SVG, with a real arrow over vector letters ----------
+   spec: {F}=vector letter, _x or _(abc)=subscript, |text|=upright run; latin letters italic */
+const LABELS=new Set();
+function mathText(parent,spec,opt){
+  opt=opt||{};
+  const size=opt.size||29, anchor=opt.anchor||'middle';
+  const g=S('g',{class:'ml'+(opt.cls?' '+opt.cls:'')},parent);
+  if(opt.x!=null||opt.y!=null)g.setAttribute('transform',`translate(${(+(opt.x||0)).toFixed(1)},${(+(opt.y||0)).toFixed(1)})`);
+  const t=S('text',{'font-size':size,y:(size*0.34).toFixed(1)},g);
+  if(opt.weight)t.setAttribute('font-weight',opt.weight);
+  const vec=[];let ci=0,inSub=false,est=0;
+  const run=(str,o)=>{o=o||{};if(!str)return;const ts=S('tspan',{},t);
+    if(o.sub){ts.setAttribute('font-size',(size*0.68).toFixed(1));if(!inSub){ts.setAttribute('dy',(size*0.3).toFixed(1));inSub=true}}
+    else if(inSub){ts.setAttribute('dy',(-size*0.3).toFixed(1));inSub=false}
+    if(o.it)ts.setAttribute('font-style','italic');
+    ts.textContent=str;ci+=str.length;est+=str.length*(o.sub?0.4:0.55)*size};
+  let i=0;
+  while(i<spec.length){const c=spec[i];
+    if(c==='{'){const j=spec.indexOf('}',i);const gl=spec.slice(i+1,j);vec.push({idx:ci,ch:gl,ex:est});run(gl,{it:true});i=j+1;continue}
+    if(c==='_'){let s;if(spec[i+1]==='('){const j=spec.indexOf(')',i);s=spec.slice(i+2,j);i=j+1}else{s=spec[i+1];i+=2}run(s,{sub:true});continue}
+    if(c==='|'){const j=spec.indexOf('|',i+1);run(spec.slice(i+1,j));i=j+1;continue}
+    let j=i;const it=/[A-Za-z]/.test(c);
+    while(j<spec.length&&!'{_|'.includes(spec[j])&&(/[A-Za-z]/.test(spec[j])===it))j++;
+    run(spec.slice(i,j),{it});i=j}
+  const arrows=vec.map(()=>S('path',{class:'vec-arrow','stroke-width':(size*0.07).toFixed(2)},g));
+  const L={g,t,vec,arrows,size,anchor,est};
+  LABELS.add(L);layoutLabel(L);
+  g._label=L;
+  return g;
+}
+function layoutLabel(L){
+  const {t,vec,arrows,size,anchor}=L;
+  let w=0;try{w=t.getComputedTextLength()}catch(e){}
+  const measured=w>0;if(!measured)w=L.est;
+  const x0=anchor==='middle'?-w/2:anchor==='end'?-w:0;
+  t.setAttribute('x',x0.toFixed(1));
+  vec.forEach((v,k)=>{
+    let a=null,b=null;
+    if(measured){try{a=t.getStartPositionOfChar(v.idx).x;b=t.getEndPositionOfChar(v.idx).x}catch(e){a=null}}
+    if(a==null||!isFinite(a)||b<=a){a=x0+v.ex;b=a+0.55*size}
+    const tall=/[A-Zbdfhklt]/.test(v.ch);
+    const y=size*0.34-(v.ch==='f'?1.04:tall?0.9:0.7)*size;
+    const sl=0.13*size, hs=size*0.15;
+    let xa=a+0.06*size+sl, xb=b+sl*0.9;
+    if(v.ch==='f'&&xb-xa<0.5*size){const m=(xa+xb)/2+0.08*size;xa=m-0.25*size;xb=m+0.25*size}   /* italic f is narrow: give its arrow a readable width, above the hook */
+    arrows[k].setAttribute('d',`M${xa.toFixed(1)} ${y.toFixed(1)}H${xb.toFixed(1)}M${(xb-hs).toFixed(1)} ${(y-hs*0.62).toFixed(1)}L${xb.toFixed(1)} ${y.toFixed(1)}L${(xb-hs).toFixed(1)} ${(y+hs*0.62).toFixed(1)}`);
+  });
+}
+function relayout(root){LABELS.forEach(L=>{if(!L.g.isConnected){LABELS.delete(L);return}if(!root||root.contains(L.g))layoutLabel(L)})}
+function setLabel(g,spec){const L=g._label;const p=g.parentNode;const tr=g.getAttribute('transform');const n=mathText(p,spec,{size:L.size,anchor:L.anchor});n.setAttribute('class',g.getAttribute('class')||'ml');if(tr)n.setAttribute('transform',tr);p.replaceChild(n,g);LABELS.delete(L);return n}
+
+/* ---------- vector arrow ---------- */
+class Arrow{
+  constructor(parent,cls,o){o=o||{};
+    this.g=S('g',{class:'arw '+(cls||'')},parent);
+    this.line=S('line',{'stroke-width':o.w||4,'stroke-linecap':'butt'},this.g);
+    if(o.dash)this.line.setAttribute('stroke-dasharray',o.dash);
+    this.head=S('path',{},this.g);
+    this.hl=o.hl||16;this.hw=o.hw||8.5;this.off=o.off==null?20:o.off;this.lpos=o.lpos||'end';this.side=o.side||1;
+    if(o.label)this.lab=mathText(this.g,o.label,{size:o.size||31});
+    if(o.opacity)this.g.setAttribute('opacity',o.opacity);
+  }
+  set(x1,y1,x2,y2){
+    const dx=x2-x1,dy=y2-y1,L=Math.hypot(dx,dy);
+    if(L<1.5){this.g.style.display='none';this.L=0;return this}
+    this.g.style.display='';
+    const ux=dx/L,uy=dy/L,hl=Math.min(this.hl,L*0.75),hw=this.hw*hl/this.hl;
+    const bx=x2-ux*hl,by=y2-uy*hl;
+    const ln=this.line;ln.setAttribute('x1',x1.toFixed(1));ln.setAttribute('y1',y1.toFixed(1));ln.setAttribute('x2',(bx+ux*0.8).toFixed(1));ln.setAttribute('y2',(by+uy*0.8).toFixed(1));
+    this.head.setAttribute('d',`M${x2.toFixed(1)},${y2.toFixed(1)}L${(bx-uy*hw).toFixed(1)},${(by+ux*hw).toFixed(1)}L${(bx+uy*hw).toFixed(1)},${(by-ux*hw).toFixed(1)}Z`);
+    if(this.lab){let lx,ly;
+      if(this.lpos==='end'){lx=x2+ux*this.off;ly=y2+uy*this.off}
+      else if(this.lpos==='mid'){lx=(x1+x2)/2-uy*this.off*this.side;ly=(y1+y2)/2+ux*this.off*this.side}
+      else if(typeof this.lpos==='function'){const p=this.lpos(x1,y1,x2,y2,ux,uy);lx=p[0];ly=p[1]}
+      this.lab.setAttribute('transform',`translate(${lx.toFixed(1)},${ly.toFixed(1)})`)}
+    this.L=L;return this}
+  hide(){this.g.style.display='none';return this}
+  show(b){this.g.style.display=b?'':'none';return this}
+}
+
+/* ---------- small svg builders ---------- */
+function defsFor(svg){return svg.querySelector('defs')||S('defs',{},svg)}
+function hatchPat(svg){const id=uid('hatch');const p=S('pattern',{id,width:9,height:9,patternUnits:'userSpaceOnUse',patternTransform:'rotate(45)'},defsFor(svg));S('line',{x1:0,y1:0,x2:0,y2:9,class:'hatch-line'},p);return id}
+function ground(parent,x0,x1,y,hid,depth){S('rect',{x:x0,y:y,width:x1-x0,height:depth||13,fill:`url(#${hid})`},parent);return S('line',{x1:x0,y1:y,x2:x1,y2:y,class:'ground'},parent)}
+function wallV(parent,x,y0,y1,hid,w,side){w=w||16;const xr=side==='left'?x-w:x;S('rect',{x:xr,y:y0,width:w,height:y1-y0,fill:`url(#${hid})`},parent);S('line',{x1:x,y1:y0,x2:x,y2:y1,class:'ground'},parent)}
+function txt(parent,x,y,s,cls,anchor){const t=S('text',{x,y,class:'svg-ui '+(cls||''),'text-anchor':anchor||'start'},parent);t.textContent=s;return t}
+function springPath(x0,y,x1,coils,amp){coils=coils||12;amp=amp||12;const lead=Math.min(16,(x1-x0)*0.12);const a=x0+lead,b=x1-lead;const n=coils*2;let d=`M${x0.toFixed(1)} ${y}H${a.toFixed(1)}`;for(let i=1;i<=n;i++){const xx=a+(b-a)*(i-0.5)/n;d+=`L${xx.toFixed(1)} ${(y+(i%2?-amp:amp)).toFixed(1)}`}d+=`L${b.toFixed(1)} ${y}H${x1.toFixed(1)}`;return d}
+function arcPath(cx,cy,r,a0,a1){/* angles in radians, svg coords (y down) */const x0=cx+r*Math.cos(a0),y0=cy+r*Math.sin(a0),x1=cx+r*Math.cos(a1),y1=cy+r*Math.sin(a1);let da=a1-a0;const large=Math.abs(da)>Math.PI?1:0;const sw=da>0?1:0;return `M${x0.toFixed(1)} ${y0.toFixed(1)}A${r} ${r} 0 ${large} ${sw} ${x1.toFixed(1)} ${y1.toFixed(1)}`}
+function niceStep(range,target){const raw=range/target;const p=Math.pow(10,Math.floor(Math.log10(raw)));const f=raw/p;return (f<1.5?1:f<2.25?2:f<3.5?2.5:f<7.5?5:10)*p}
+function niceMax(v){if(v<=0)return 1;const p=Math.pow(10,Math.floor(Math.log10(v)));const f=v/p;return (f<=1?1:f<=1.5?1.5:f<=2?2:f<=2.5?2.5:f<=3?3:f<=4?4:f<=5?5:f<=6?6:f<=8?8:10)*p}
+
+/* ---------- graph ---------- */
+class Graph{
+  constructor(parent,o){
+    Object.assign(this,{xticks:6,yticks:4,xfmt:tk,yfmt:tk,xgrid:true,ygrid:true},o);
+    this.root=S('g',{class:'graph'},parent);
+    this.axes=S('g',{},this.root);
+    const cid=uid('clip');const cp=S('clipPath',{id:cid},this.root);this.cr=S('rect',{},cp);
+    this.plot=S('g',{'clip-path':`url(#${cid})`},this.root);
+    this.over=S('g',{},this.root);
+    this.draw();
+  }
+  X(v){return this.x+(v-this.xmin)/(this.xmax-this.xmin)*this.w}
+  Y(v){return this.y+this.h-(v-this.ymin)/(this.ymax-this.ymin)*this.h}
+  iX(px){return this.xmin+(px-this.x)/this.w*(this.xmax-this.xmin)}
+  iY(py){return this.ymin+(this.y+this.h-py)/this.h*(this.ymax-this.ymin)}
+  range(o){Object.assign(this,o);this.draw()}
+  draw(){
+    const A=this.axes;A.textContent='';
+    this.cr.setAttribute('x',this.x-3);this.cr.setAttribute('y',this.y-3);this.cr.setAttribute('width',this.w+6);this.cr.setAttribute('height',this.h+6);
+    const xs=this.xstep||niceStep(this.xmax-this.xmin,this.xticks),ys=this.ystep||niceStep(this.ymax-this.ymin,this.yticks);
+    for(let v=Math.ceil(this.xmin/xs-1e-9)*xs;v<=this.xmax+1e-9;v+=xs){const X=this.X(v);if(this.xgrid)S('line',{x1:X,x2:X,y1:this.y,y2:this.y+this.h,class:'gridl'},A);if(!this.noXLabels){const t=S('text',{x:X,y:this.y+this.h+27,class:'tick','text-anchor':'middle'},A);t.textContent=this.xfmt(Math.abs(v)<1e-9?0:v)}}
+    for(let v=Math.ceil(this.ymin/ys-1e-9)*ys;v<=this.ymax+1e-9;v+=ys){const Y=this.Y(v);if(this.ygrid)S('line',{x1:this.x,x2:this.x+this.w,y1:Y,y2:Y,class:'gridl'},A);const t=S('text',{x:this.x-8,y:Y+5,class:'tick','text-anchor':'end'},A);t.textContent=this.yfmt(Math.abs(v)<1e-9?0:v)}
+    const y0=(this.ymin<=0&&this.ymax>=0)?this.Y(0):this.y+this.h;
+    S('line',{x1:this.x,x2:this.x+this.w,y1:y0,y2:y0,class:'axisl'},A);
+    const x0=(this.xmin<=0&&this.xmax>=0)?this.X(0):this.x;
+    S('line',{x1:x0,x2:x0,y1:this.y,y2:this.y+this.h,class:'axisl'},A);
+    if(this.ytitle)mathText(A,this.ytitle,{size:this.tsize||27,x:this.x-4,y:this.y-22,anchor:'start'});
+    if(this.xtitle)mathText(A,this.xtitle,{size:this.tsize||27,x:this.x+this.w,y:this.y+this.h+(this.noXLabels?28:58),anchor:'end'});
+  }
+}
+function tk(v){if(Math.abs(v)<1e-9)return '0';if(Math.abs(v)>=1e5)return num(v,2);return (+v.toPrecision(4)).toLocaleString('en-US',{maximumFractionDigits:3}).replace('-',MINUS)}
+/* dynamic math text without measurement: parts = ['plain', ['x','i'], ['sub','s']] */
+function mtext(parent,parts,attrs){attrs=Object.assign({},attrs||{});const size=+(attrs['font-size']||21);const t=S('text',Object.assign({class:'mt'},attrs),parent);let sub=false;if(attrs&&attrs['font-size'])t.style.fontSize=size+'px';
+  const sp=parts.map(p=>{const a=Array.isArray(p)?p:[p,''];const s=S('tspan',{},t);const st=a[1]||'';
+    if(st.includes('i'))s.setAttribute('font-style','italic');
+    if(st.includes('s')){s.setAttribute('font-size',(size*0.7).toFixed(1));if(!sub){s.setAttribute('dy',(size*0.28).toFixed(1));sub=true}}else if(sub){s.setAttribute('dy',(-size*0.28).toFixed(1));sub=false}
+    s.textContent=a[0];return s});
+  return {el:t,sp,set(i,v){if(sp[i])sp[i].textContent=v},pos(x,y){t.setAttribute('x',(+x).toFixed(1));t.setAttribute('y',(+y).toFixed(1))},show(b){t.style.display=b?'':'none'}}}
+function polyPts(pts){return pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ')}
+
+/* ---------- bar equation: bars with + and = between them ---------- */
+class BarEq{
+  constructor(parent,o){
+    this.g=S('g',{class:'bareq'},parent);this.items=[];this.y0=o.y0;this.up=o.up||200;this.down=o.down==null?this.up:o.down;this.fmt=o.fmt||(v=>J(v));this.scale=1;this.bw=o.bw||50;
+    const ow=o.ow||26;let cx=o.x;
+    const bars=S('g',{},this.g),labs=S('g',{},this.g);
+    for(const it of o.items){
+      if(typeof it==='string'){const t=S('text',{x:cx+ow/2,y:this.y0-10,class:'bar-op','text-anchor':'middle'},labs);t.textContent=it;cx+=ow;continue}
+      const b=Object.assign({},it,{x:cx});
+      if(it.stack)b.rects=it.stack.map(s=>S('rect',{x:cx,width:this.bw,class:'bar '+s.cls,height:0,y:this.y0},bars));
+      else b.rect=S('rect',{x:cx,width:this.bw,class:'bar '+it.cls,height:0,y:this.y0},bars);
+      b.val=S('text',{x:cx+this.bw/2,y:this.y0-8,class:'bar-val','text-anchor':'middle'},labs);
+      b.lab=mathText(labs,it.label,{size:o.lsize||30,x:cx+this.bw/2,y:o.labelY});
+      this.items.push(b);cx+=this.bw}
+    this.width=cx-o.x;this.x=o.x;
+    S('line',{x1:o.x-8,x2:cx+8,y1:this.y0,y2:this.y0,class:'bar-base'},this.g);
+  }
+  setScale(m){this.scale=m>0?m:1}
+  set(vals){
+    for(const b of this.items){
+      if(b.stack){let acc=0,tot=0;b.stack.forEach((s,i)=>{const v=Math.max(0,vals[s.key]||0);tot+=vals[s.key]||0;const h=Math.min(v/this.scale*this.up,this.up+6-acc);const r=b.rects[i];r.setAttribute('y',(this.y0-acc-Math.max(0,h)).toFixed(1));r.setAttribute('height',Math.max(0,h).toFixed(1));acc+=Math.max(0,h)});b.val.setAttribute('y',Math.min(this.y0-acc-8,this.y0-36).toFixed(1));b.val.textContent=this.fmt(tot);continue}
+      const v=vals[b.key]||0;let h=Math.abs(v)/this.scale*this.up;h=Math.min(h,(v>=0?this.up:this.down)+6);
+      if(v>=0){b.rect.setAttribute('y',(this.y0-h).toFixed(1));b.val.setAttribute('y',Math.min(this.y0-h-8,this.y0-36).toFixed(1))}
+      else{b.rect.setAttribute('y',this.y0.toFixed(1));b.val.setAttribute('y',(this.y0+h+19).toFixed(1))}
+      b.rect.setAttribute('height',h.toFixed(1));
+      b.val.textContent=Math.abs(v)<1e-9&&b.zeroText?b.zeroText:this.fmt(v)}
+  }
+}
+
+/* ---------- html controls ---------- */
+function decOf(step){const s=String(step);return s.includes('.')?s.split('.')[1].length:0}
+function Slider(o){
+  const id=uid('s');
+  const out=H('output',{class:'ctl-v',for:id});
+  const inp=H('input',{type:'range',id,min:o.min,max:o.max,step:o.step||1,value:o.value});
+  const el=H('div',{class:'ctl'},H('label',{for:id,class:'ctl-l',html:o.label}),out,inp);
+  const show=()=>{const v=+inp.value;out.textContent=o.fmt?o.fmt(v):(fx(v,o.dec!=null?o.dec:decOf(o.step||1))+(o.unit?NB+o.unit:''));inp.style.setProperty('--p',((v-inp.min)/(inp.max-inp.min)*100)+'%')};
+  inp.addEventListener('input',()=>{show();o.onInput&&o.onInput(+inp.value)});
+  show();
+  return {el,inp,get:()=>+inp.value,set(v,fire){inp.value=v;show();if(fire&&o.onInput)o.onInput(+inp.value)},range(a,b){inp.min=a;inp.max=b;show()},show(b){el.hidden=!b},disable(b){inp.disabled=!!b}};
+}
+function Seg(options,value,onChange,label){
+  const el=H('div',{class:'seg',role:'group','aria-label':label||'Mode'});
+  const api={el,value,set(v,fire){api.value=v;btns.forEach((b,i)=>b.setAttribute('aria-pressed',String(options[i].v===v)));if(fire)onChange(v)}};
+  const btns=options.map(o=>{const b=H('button',{type:'button',class:'seg-b','aria-pressed':String(o.v===value),html:o.label});b.addEventListener('click',()=>api.set(o.v,true));el.append(b);return b});
+  return api;
+}
+function Chips(options,onPick,o){o=o||{};
+  const el=H('div',{class:'chips',role:'group','aria-label':o.label||'Presets'});
+  const btns=options.map(op=>{const b=H('button',{type:'button',class:'chip','aria-pressed':'false',html:op.label});b.addEventListener('click',()=>{api.mark(op.v);onPick(op.v)});el.append(b);return b});
+  const api={el,mark(v){btns.forEach((b,i)=>b.setAttribute('aria-pressed',String(options[i].v===v)))}};
+  return api;
+}
+function Check(label,checked,onChange){const id=uid('c');const inp=H('input',{type:'checkbox',id});inp.checked=!!checked;inp.addEventListener('change',()=>onChange(inp.checked));const el=H('label',{class:'check',for:id},inp,H('span',{html:label}));return {el,inp,get:()=>inp.checked,set(b){inp.checked=b}}}
+function Sec(parent,title){const s=H('section',{class:'sec'});if(title)s.append(H('h3',{html:title}));parent.append(s);return s}
+/* equation block with live slots: write {key} in html */
+function Eq(parent,html,cls){const p=H('p',{class:'eq '+(cls||'')});p.innerHTML=html.replace(/\{(\w+)\}/g,'<span class="n" data-v="$1"></span>');parent.append(p);const slots={};p.querySelectorAll('[data-v]').forEach(s=>slots[s.dataset.v]=s);return {el:p,set(k,v){if(slots[k])slots[k].textContent=v},setAll(o){for(const k in o)if(slots[k])slots[k].textContent=o[k]},html(h){p.innerHTML=h}}}
+const V=x=>`<span class="vec"><i>${x}</i></span>`;
+const Vl=x=>`<span class="vec lo"><i>${x}</i></span>`;
+
+function PlayBar(ctx,o){
+  const play=H('button',{type:'button',class:'btn primary'});
+  const reset=H('button',{type:'button',class:'btn',html:ICON.reset+'<span>Reset</span>'});
+  ctx.bar.append(play,reset);
+  let scrub=null;
+  if(o.scrub){scrub=H('input',{type:'range',min:0,max:1000,value:0,class:'scrub','aria-label':'Scrub through the process'});scrub.addEventListener('input',()=>{scrub.style.setProperty('--p',(scrub.value/10)+'%');o.onScrub(scrub.value/1000)});ctx.bar.append(scrub)}
+  const live=H('div',{class:'live','aria-live':'off'});ctx.bar.append(live);
+  const slots={};
+  const api={playing:false,el:play,
+    set(p){api.playing=p;play.innerHTML=p?ICON.pause+'<span>Pause</span>':ICON.play+'<span>Play</span>';play.setAttribute('aria-label',p?'Pause':'Play')},
+    scrub(v){if(scrub){scrub.value=Math.round(v*1000);scrub.style.setProperty('--p',(v*100)+'%')}},
+    liveDef(items){live.textContent='';items.forEach(([k,lab])=>{const s=H('span',{class:'lv'});s.innerHTML=lab+' = ';const v=H('span',{class:'n'});s.append(v);live.append(s);slots[k]=v})},
+    liveSet(k,v){if(slots[k])slots[k].textContent=v},
+    liveEl:live};
+  play.addEventListener('click',()=>o.onToggle());
+  reset.addEventListener('click',()=>o.onReset());
+  api.set(false);
+  return api;
+}
+
+/* ---------- pointer dragging inside an svg ---------- */
+function svgPt(svg,e){const p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;const m=svg.getScreenCTM();return m?p.matrixTransform(m.inverse()):{x:0,y:0}}
+function draggable(el,svg,h){
+  el.style.touchAction='none';
+  el.addEventListener('pointerdown',e=>{
+    if(e.pointerType==='mouse'&&e.button!==0)return;
+    e.preventDefault();e.stopPropagation();
+    try{el.setPointerCapture(e.pointerId)}catch(_){}
+    el.classList.add('dragging');
+    h.start&&h.start(svgPt(svg,e));
+    const mv=ev=>h.move(svgPt(svg,ev));
+    const up=()=>{el.removeEventListener('pointermove',mv);el.removeEventListener('pointerup',up);el.removeEventListener('pointercancel',up);el.classList.remove('dragging');h.end&&h.end()};
+    el.addEventListener('pointermove',mv);el.addEventListener('pointerup',up);el.addEventListener('pointercancel',up);
+  });
+}
+/* deterministic pseudo random */
+function rng(seed){let s=seed>>>0;return()=>{s=(s*1664525+1013904223)>>>0;return s/4294967296}}
+
+/* ---------- registries ---------- */
+const TABS=[];const TAB={};
+function tab(def){def.num=TABS.length+1;TABS.push(def);TAB[def.id]=def}
+const Q={};
+function defQ(id,o){Q[id]=Object.assign({id},o)}
+/* ================= Chapter 10 helpers ================= */
+const g10=9.8;
+const Ug='<i>U</i><sub>G</sub>',Usp='<i>U</i><sub>Sp</sub>',Eth='<i>E</i><sub>th</sub>',Wext='<i>W</i><sub>ext</sub>',Wint='<i>W</i><sub>int</sub>';
+const M=h=>'<span class="m">'+h+'</span>';
+const note=h=>H('p',{class:'note',html:h});
+const keyIdea=h=>H('p',{class:'status',html:'<b>Key idea:</b> '+h});
+const hint=h=>H('p',{class:'hint',html:h});
+/* math text with real sizes and per-part colors: parts like [['K','i'],' = ',['U','i'],['G','s']] */
+function mt(parent,parts,x,y,size,o){o=o||{};const m=mtext(parent,parts,{'font-size':size,x,y,'text-anchor':o.anchor||'start'});
+  if(o.weight)m.el.style.fontWeight=o.weight;if(o.fill)m.el.style.fill=o.fill;
+  (o.colors||[]).forEach(([i,c])=>{if(m.sp[i])m.sp[i].style.fill=`var(${c})`});return m}
+/* energy bar chart from BarEq: keys [[key,cls,label],...]; '+' between them, and an optional stacked total */
+function EBars(parent,o){const items=[];
+  o.keys.forEach((k,i)=>{if(i)items.push(k.op||'+');items.push({key:k[0],cls:k[1],label:k[2],zeroText:'0 J'})});
+  if(o.total){items.push('=');items.push({key:'T',label:o.totalLabel||'E_(mech)',stack:o.keys.filter(k=>!k.noStack).map(k=>({key:k[0],cls:k[1]}))})}
+  const b=new BarEq(parent,{x:o.x,y0:o.y0,up:o.up||220,down:o.down||0,bw:o.bw||60,ow:o.ow||38,labelY:o.y0+(o.down?o.down+62:42),lsize:o.lsize||31,items,fmt:o.fmt||ejFmt});
+  if(o.title)txt(parent,o.x,o.y0-(o.up||220)-30,o.title,'strong');
+  return b}
+/* dashed system boundary with its label */
+function sysBox(parent,o){const g=S('g',{},parent);
+  const r=S('rect',{rx:16,style:'fill:none;stroke:var(--sysbox);stroke-width:2.6;stroke-dasharray:10 7'},g);
+  const t=txt(g,0,0,o.label||'System','strong');t.style.fill='var(--sysbox)';
+  const api={g,set(x,y,w,h){r.setAttribute('x',x);r.setAttribute('y',y);r.setAttribute('width',w);r.setAttribute('height',h);t.setAttribute('x',x+14);t.setAttribute('y',y+30)},
+    label(s){t.textContent=s},show(b){g.style.display=b?'':'none'}};
+  if(o.x!=null)api.set(o.x,o.y,o.w,o.h);return api}
+/* a vertical spring drawn from (x,y0) up or down to (x,y1) */
+function springV(x,y0,y1,coils,amp){const n=coils*2,dy=(y1-y0)/(n+2);let d=`M${x} ${y0}L${x} ${(y0+dy).toFixed(1)}`;
+  for(let i=1;i<=n;i++)d+=`L${(x+(i%2?amp:-amp)).toFixed(1)} ${(y0+dy*(i+0.5)).toFixed(1)}`;return d+`L${x} ${(y1-dy).toFixed(1)}L${x} ${y1}`}
+/* points along a curve, parameterized by arc length, for motion along a track */
+function arcTrack(pts){const s=[0];for(let i=1;i<pts.length;i++)s.push(s[i-1]+Math.hypot(pts[i][0]-pts[i-1][0],pts[i][1]-pts[i-1][1]));
+  const L=s[s.length-1];
+  return {L,at(d){d=clamp(d,0,L);let i=1;while(i<s.length-1&&s[i]<d)i++;const t=(d-s[i-1])/((s[i]-s[i-1])||1);
+    return [lerp(pts[i-1][0],pts[i][0],t),lerp(pts[i-1][1],pts[i][1],t),Math.atan2(pts[i][1]-pts[i-1][1],pts[i][0]-pts[i-1][0])]}}}
+const vfmt=v=>fx(Math.abs(v)<5e-3?0:v,2)+NB+'m/s', mfmt=v=>fx(Math.abs(v)<5e-3?0:v,2)+NB+'m';
+const Jz=v=>J(Math.abs(v)<5e-4?0:v);
+/* bar values: short plain decimals, never scientific notation */
+const ejFmt=v=>{const a=Math.abs(v);return (a<0.005?'0':a<10?fx(v,2):a<100?fx(v,1):fx(v,0))+NB+'J'};
+
+/* playback-speed slider beside Play and Reset. Only the animation changes; the values shown are the real ones. */
+function SpeedSlider(ctx,pb){
+  const RATES=[0.125,0.25,0.5,0.75,1,1.5,2,3,4],RLAB=['⅛×','¼×','½×','¾×','1×','1.5×','2×','3×','4×'],idx={};let cur=null,rate=1;
+  const inp=H('input',{type:'range',min:0,max:8,step:1,value:4,'aria-label':'Playback speed',title:'Drag left to slow down, right to speed up',style:'width:160px;flex:none'});
+  const out=H('output',{class:'ctl-v',style:'min-width:7.4em;font-size:16.5px'});
+  const show=()=>{const k=+inp.value;rate=RATES[k];out.textContent=RLAB[k]+NB+(k<4?'slower':k>4?'faster':'normal');inp.style.setProperty('--p',(k/8*100)+'%')};
+  inp.addEventListener('input',()=>{if(cur!=null)idx[cur]=+inp.value;show()});
+  const box=H('div',{style:'display:inline-flex;align-items:center;gap:8px;flex:none'},H('span',{text:'Speed',style:'font-size:16px;font-weight:700;color:var(--muted)'}),inp,out);
+  ctx.bar.insertBefore(box,pb.liveEl);show();
+  return {box,get rate(){return rate},view(v){cur=v;inp.value=idx[v]!=null?idx[v]:4;show()}};
+}
+/* ================= 1. Potential energy (slides 14-16) ================= */
+tab({id:'pe',label:'Potential energy',title:'Potential energy is interaction energy',
+lede:'When two objects interact, you can put both of them, and their interaction, inside the system. Then the work done by the interaction forces is stored as potential energy: '+M('Δ<i>U</i> = −<i>W</i><sub>int</sub>')+'.',
+questions:['RQ10.1'],
+build(ctx){
+  const svg=S('svg',{viewBox:'0 0 1000 560',role:'img','aria-label':'A ball tossed up from the ground, with a dashed system boundary and energy bars'},ctx.stage);
+  const hid=hatchPat(svg),GY=470,BX=330,R=18,PY=54,m=0.5,SLOW=0.55;
+  /* the earth */
+  S('path',{d:'M60 476 Q300 452 540 476 L540 560 L60 560 Z',style:'fill:var(--ground);opacity:.22'},svg);
+  ground(svg,60,540,GY,hid);
+  const envT=txt(svg,532,548,'earth','strong','end');
+  S('line',{x1:160,x2:160,y1:GY,y2:GY-5.2*PY,class:'axisl'},svg);
+  for(let i=1;i<=5;i++){S('line',{x1:152,x2:160,y1:GY-i*PY,y2:GY-i*PY,class:'axisl'},svg);txt(svg,146,GY-i*PY+8,i+' m','small muted','end')}
+  const boxTwo=sysBox(svg,{x:70,y:92,w:556,h:466,label:'System: ball + earth'});
+  const boxOne=S('rect',{rx:14,style:'fill:none;stroke:var(--sysbox);stroke-width:2.6;stroke-dasharray:10 7'},svg);
+  const oneT=txt(svg,0,0,'System: ball','strong');oneT.style.fill='var(--sysbox)';
+  const ball=S('circle',{r:R,cx:BX,class:'obj2'},svg);
+  const FG=new Arrow(svg,'c-F',{label:'{F}_G',off:0,lpos:(x1,y1,x2,y2)=>[x2+24,y2-6]});
+  const fT=txt(svg,0,0,'','small muted');
+  const vA=new Arrow(svg,'c-v',{label:'{v}',off:0,lpos:(x1,y1,x2,y2)=>[x1-26,(y1+y2)/2]});
+  /* bars: ball only -> ΔK = W_ext ; ball + earth -> ΔK + ΔU_G = 0 */
+  const bOne=EBars(svg,{x:660,y0:300,up:170,down:170,ow:76,keys:[['dK','K','ΔK'],Object.assign(['W','W','W_(ext)'],{op:'='})]});
+  const bTwo=EBars(svg,{x:660,y0:300,up:170,down:170,ow:52,keys:[['dK','K','ΔK'],['dU','U','ΔU_G'],Object.assign(['Z','n','|0|'],{op:'='})]});
+  const barT=txt(svg,650,72,'','strong');
+  const PE=[bOne,bTwo];
+  /* side panel */
+  const mode=ctx.modes([{v:'one',label:'System: ball'},{v:'two',label:'System: ball + earth'}],'two',v=>setView(v));
+  const sA=Sec(ctx.side,'What the system choice changes');const nA=note('');sA.append(nA);
+  const sB=Sec(ctx.side,'Try it');
+  const v0S=Slider({label:'Launch speed <i>v</i><sub>0</sub>',min:4,max:10,step:0.5,value:8,unit:'m/s',onInput:()=>reset()});
+  sB.append(v0S.el,hint('The ball’s mass is 0.50 kg. Press Play to toss it.'));
+  const sC=Sec(ctx.side,'Right now');
+  const eW=Eq(sC,'Work by gravity: <i>W</i> = −<i>mg</i>Δ<i>y</i> = {W}','small');
+  const eOne=Eq(sC,'Δ<i class="qK">K</i> = <i class="qW">W</i><sub>ext</sub> = {dK}','small');
+  const eTwo1=Eq(sC,'Δ<i class="qU">U</i><sub>G</sub> = −<i>W</i><sub>int</sub> = {dU}','small');
+  const eTwo2=Eq(sC,'Δ<i class="qK">K</i> + Δ<i class="qU">U</i><sub>G</sub> = {dK} + {dU} = 0 J','small');
+  sC.append(keyIdea('potential energy belongs to the system of interacting objects, not to the ball alone.'));
+  const NOTE={one:'The earth is <b>outside</b> the system, so gravity is an external force. Its work changes the ball’s kinetic energy, '+M('Δ<i>K</i> = <i>W</i><sub>ext</sub>')+'. There is no potential energy.',
+    two:'The earth is <b>inside</b> the system, so gravity is an interaction within it. Its work is stored as gravitational potential energy, '+M('Δ<i>U</i><sub>G</sub> = −<i>W</i><sub>int</sub>')+', and '+M('Δ<i>K</i> + Δ<i>U</i><sub>G</sub> = 0')+'.'};
+  /* state */
+  let V='two',running=false,t=0,y=0,v=0;
+  const pb=PlayBar(ctx,{onToggle:()=>{if(t>=2*v0S.get()/g10-1e-6)reset();running=!running;pb.set(running)},onReset:()=>reset()});
+  pb.liveDef([['y','<i>y</i>'],['v','<i>v<sub>y</sub></i>'],['k','Δ<i>K</i>']]);
+  function draw(){const v0=v0S.get(),K0=0.5*m*v0*v0,W=-m*g10*y,dK=0.5*m*v*v-K0,cy=GY-R-y*PY;
+    ball.setAttribute('cy',cy.toFixed(1));
+    FG.set(BX,cy,BX,cy+58);fT.setAttribute('x',BX+48);fT.setAttribute('y',(cy+60).toFixed(1));
+    fT.textContent=V==='one'?'external force':'interaction force';
+    if(Math.abs(v)>0.05){const x=BX-64;vA.set(x,cy,x,cy-v*7)}else vA.hide();
+    boxOne.style.display=oneT.style.display=V==='one'?'':'none';boxTwo.show(V==='two');
+    boxOne.setAttribute('x',BX-36);boxOne.setAttribute('y',(cy-36).toFixed(1));boxOne.setAttribute('width',72);boxOne.setAttribute('height',72);
+    oneT.setAttribute('x',BX+46);oneT.setAttribute('y',(cy-40).toFixed(1));
+    envT.textContent=V==='one'?'earth (environment)':'earth';
+    PE.forEach(b=>b.setScale(Math.max(1,K0)));
+    bOne.set({dK,W});bTwo.set({dK,dU:-W,Z:0});
+    eW.set('W',Jz(W));eOne.set('dK',Jz(dK));eTwo1.set('dU',Jz(-W));eTwo2.setAll({dK:paren(Jz(dK)),dU:paren(Jz(-W))});
+    pb.liveSet('y',mfmt(y));pb.liveSet('v',vfmt(v));pb.liveSet('k',Jz(dK))}
+  function reset(){running=false;pb.set(false);t=0;y=0;v=v0S.get();draw()}
+  function setView(k){V=k;mode.set(k);bOne.g.style.display=k==='one'?'':'none';bTwo.g.style.display=k==='two'?'':'none';
+    barT.textContent=k==='one'?'Energy of the ball':'Energy of ball + earth';
+    nA.innerHTML=NOTE[k];[eOne.el].forEach(e=>e.hidden=k!=='one');[eTwo1.el,eTwo2.el].forEach(e=>e.hidden=k!=='two');
+    ctx.cap.innerHTML=k==='one'?'Bars show changes since the toss. With the earth outside the system, gravity’s work is a transfer: '+M('Δ<i>K</i> = <i>W</i><sub>ext</sub>')+'.':'Bars show changes since the toss. With the earth inside the system, the kinetic energy the ball loses is stored as potential energy, so the two bars always cancel.';
+    draw();relayout(svg)}
+  setView('two');reset();
+  return {step(dt){if(!running)return;const v0=v0S.get(),T=2*v0/g10;t=Math.min(T,t+dt*SLOW);y=Math.max(0,v0*t-0.5*g10*t*t);v=v0-g10*t;
+      if(t>=T){y=0;v=-v0;running=false;pb.set(false)}draw()},
+    toggle:()=>pb.el.click(),reset,deactivate(){running=false;pb.set(false)},view:v=>setView(v)};
+}});
+/* ================= 2. Gravitational potential energy (slides 17-32) ================= */
+tab({id:'grav',label:'Gravitational PE',title:'Gravitational potential energy',
+lede:'For the earth + object system, '+M('<i>U</i><sub>G</sub> = <i>mgy</i>')+', where <i>y</i> is the object’s height. Only changes in '+M('<i>U</i><sub>G</sub>')+' matter, so you can put '+M('<i>y</i> = 0')+' wherever you like.',
+questions:['RQ10.2','RQ10.3','QC10.1'],
+build(ctx){
+  const svg=S('svg',{viewBox:'0 0 1000 560',role:'img','aria-label':'Gravitational potential energy and kinetic energy as a pebble rises and falls'},ctx.stage);
+  const hid=hatchPat(svg);
+  /* ---------- tossed pebble (Example 10.1) ---------- */
+  const gT=S('g',{},svg),Y0=490,PY=26.5,PX=250;
+  ground(gT,60,440,Y0+40,hid);
+  S('line',{x1:118,x2:118,y1:Y0,y2:Y0-16*PY,class:'axisl'},gT);
+  for(let i=0;i<=16;i+=2){S('line',{x1:110,x2:118,y1:Y0-i*PY,y2:Y0-i*PY,class:'axisl'},gT);txt(gT,104,Y0-i*PY+7,i+' m','small muted','end')}
+  S('path',{d:`M${PX} ${Y0+40}V${Y0+14}M${PX} ${Y0+14}L${PX-16} ${Y0-2}M${PX} ${Y0+14}L${PX+16} ${Y0-2}`,class:'wood-stroke',style:'stroke-width:9'},gT);
+  const topL=S('line',{x1:118,x2:440,class:'dim dash'},gT),topT=txt(gT,PX+62,0,'','small');
+  const peb=S('circle',{r:10,cx:PX,class:'obj2'},gT);
+  const pv=new Arrow(gT,'c-v',{label:'{v}',off:22});
+  const bT=EBars(gT,{x:600,y0:470,up:300,keys:[['K','K','K'],['U','U','U_G']],total:true,totalLabel:'K| + |U_G'});
+  txt(gT,560,82,'Energy of pebble + earth','strong');
+  /* ---------- where is y = 0? (slide 26, Example 10.2) ---------- */
+  const gZ=S('g',{},svg),ST=372,ZP=24,WX=304,mW=5;
+  S('rect',{x:96,y:ST-11*ZP,width:150,height:11*ZP,class:'obj'},gZ);
+  for(let r=0;r<3;r++)for(let c=0;c<2;c++)S('rect',{x:120+c*62,y:ST-11*ZP+28+r*86,width:40,height:46,style:'fill:var(--surface);stroke:var(--obj-stroke);stroke-width:1.5'},gZ);
+  S('line',{x1:246,x2:290,y1:ST-11*ZP,y2:ST-11*ZP,style:'stroke:var(--obj-stroke);stroke-width:6;stroke-linecap:round'},gZ);
+  ground(gZ,60,282,ST,hid);ground(gZ,326,440,ST,hid);
+  S('path',{d:`M282 ${ST}V${ST+3*ZP}H326V${ST}`,style:'fill:var(--rule-2);stroke:var(--ground);stroke-width:3'},gZ);
+  /* fixed distances, just left of the bar chart: they never change, whatever you call y = 0 */
+  const DX=474,dimArrow=(y1,y2,label)=>{S('line',{x1:DX,x2:DX,y1,y2,style:'stroke:var(--ink-2);stroke-width:2.2'},gZ);
+    [[y1,1],[y2,-1]].forEach(([y,sg])=>S('path',{d:`M${DX-7} ${y+sg*12}L${DX} ${y}L${DX+7} ${y+sg*12}`,style:'fill:none;stroke:var(--ink-2);stroke-width:2.2;stroke-linejoin:round'},gZ));
+    txt(gZ,DX-12,(y1+y2)/2+9,label,'small strong','end')};
+  [[290,ST-11*ZP],[440,ST],[326,ST+3*ZP]].forEach(([x,y])=>S('line',{x1:x,x2:DX+10,y1:y,y2:y,class:'dim dash'},gZ));
+  dimArrow(ST-11*ZP,ST,'11 m');dimArrow(ST,ST+3*ZP,'3.0 m');
+  const lev=[['balcony',11],['street',0],['hole',-3]].map(([n,h])=>({h,n,t:txt(gZ,DX+16,ST-h*ZP+9,'','small')}));
+  txt(gZ,170,ST-11*ZP-14,'balcony','small muted','middle');txt(gZ,418,ST-14,'street','small muted','middle');txt(gZ,270,ST+1.5*ZP+9,'manhole','small muted','end');
+  const zLine=S('line',{x1:60,x2:446,style:'stroke:var(--accent);stroke-width:2.5;stroke-dasharray:10 6'},gZ);
+    const mel=S('circle',{r:14,cx:WX,style:'fill:#4C9A3A;stroke:#2E5E24;stroke-width:2'},gZ);
+  const mv=new Arrow(gZ,'c-v',{label:'{v}',off:0,lpos:(x1,y1,x2,y2)=>[x1+22,(y1+y2)/2]});
+  const bZ=EBars(gZ,{x:626,y0:290,up:180,down:180,keys:[['Ki','K','K_i'],['Ui','U','U_(G i)'],Object.assign(['Kf','K','K_f'],{op:'='}),['Uf','U','U_(G f)']]});
+  txt(gZ,600,62,'Before and after the fall','strong');
+  /* ---------- side panel ---------- */
+  const mode=ctx.modes([{v:'toss',label:'Tossed pebble'},{v:'zero',label:'Where is y = 0?'}],'toss',v=>setView(v));
+  const tA=Sec(ctx.side,'Try it');
+  const tPre=Chips([{v:'ex',label:'Example 10.1: 25 g at 17 m/s'}],()=>{vS.set(17);mS.set(25);reset()});
+  const vS=Slider({label:'Launch speed <i>v</i><sub>0</sub>',min:5,max:20,step:0.5,value:17,unit:'m/s',onInput:()=>{tPre.mark(null);reset()}});
+  const mS=Slider({label:'Mass <i>m</i>',min:10,max:100,step:5,value:25,unit:'g',onInput:()=>{tPre.mark(null);reset()}});
+  tA.append(tPre.el,vS.el,mS.el);tPre.mark('ex');
+  const tB=Sec(ctx.side,'How high does it go?');
+  Eq(tB,'<i class="qU">U</i><sub>G</sub> = <i>mgy</i>','big');
+  Eq(tB,'½<i>mv</i><sub>0</sub><sup>2</sup> + 0 = 0 + <i>mgy</i><sub>1</sub>','small');
+  const eH=Eq(tB,'<i>y</i><sub>1</sub> = <i>v</i><sub>0</sub><sup>2</sup>/2<i>g</i> = {h}','small');
+  tB.append(note('The mass cancels. A heavier pebble starts with more kinetic energy but needs more potential energy to rise, so it reaches the same height.'),
+    keyIdea('as the pebble rises, '+M('<i>K</i>')+' turns into '+M('<i>U</i><sub>G</sub>')+'; as it falls, it turns back. The sum stays the same.'));
+  const zA=Sec(ctx.side,'Where is y = 0?');
+  const zPre=Chips([{v:0,label:'At the street'},{v:11,label:'At the balcony'},{v:-3,label:'At the bottom of the hole'}],k=>{zero=k;resetZ()});
+  zA.append(note('A 5.0 kg watermelon falls 11 m from a balcony, then 3.0 m more into an open manhole (Example 10.2).'),zPre.el);
+  const zB=Sec(ctx.side,'Calculate');
+  const eZ1=Eq(zB,'<i class="qU">U</i><sub>G i</sub> = <i>mgy</i><sub>i</sub> = {Ui}','small'),eZ2=Eq(zB,'<i class="qU">U</i><sub>G f</sub> = <i>mgy</i><sub>f</sub> = {Uf}','small');
+  const eZ3=Eq(zB,'Δ<i class="qU">U</i><sub>G</sub> = {dU}','small'),eZ4=Eq(zB,'<i class="qK">K</i><sub>f</sub> = −Δ<i>U</i><sub>G</sub> → <i>v</i><sub>f</sub> = {v}','small');
+  zB.append(keyIdea('moving '+M('<i>y</i> = 0')+' adds the same amount to every value of '+M('<i>U</i><sub>G</sub>')+', so '+M('Δ<i>U</i><sub>G</sub>')+' and the impact speed do not change. A negative '+M('<i>U</i><sub>G</sub>')+' just means below your chosen zero.'));
+  const SIDE={toss:[tA,tB],zero:[zA,zB]};
+  /* ---------- state ---------- */
+  let V='toss',running=false,t=0,zero=0,zt=0;
+  const pb=PlayBar(ctx,{onToggle:()=>{if(V==='toss'&&t>=2*vS.get()/g10-1e-6)reset();if(V==='zero'&&zt>=TZ()-1e-6)resetZ();running=!running;pb.set(running)},onReset:()=>V==='toss'?reset():resetZ()});
+  const TZ=()=>Math.sqrt(2*14/g10);
+  function drawT(){const v0=vS.get(),m=mS.get()/1000,y=Math.max(0,v0*t-0.5*g10*t*t),v=v0-g10*t,h=v0*v0/(2*g10),cy=Y0-10-y*PY;
+    peb.setAttribute('cy',cy.toFixed(1));if(Math.abs(v)>0.1){pv.set(PX+36,cy,PX+36,cy-v*3.4)}else pv.hide();
+    const hy=Y0-h*PY;topL.setAttribute('y1',hy);topL.setAttribute('y2',hy);topT.setAttribute('y',(hy-12).toFixed(1));topT.textContent='top: '+fx(h,1)+' m';
+    bT.setScale(0.5*m*v0*v0);bT.set({K:0.5*m*v*v,U:m*g10*y});eH.set('h',fx(h,1)+NB+'m');
+    pb.liveSet('y',mfmt(y));pb.liveSet('v',vfmt(v));pb.liveSet('K',Jz(0.5*m*v*v));pb.liveSet('U',Jz(m*g10*y))}
+  function reset(){running=false;pb.set(false);t=0;drawT()}
+  function drawZ(){const d=Math.min(14,0.5*g10*zt*zt),yb=11-d,v=g10*zt,cy=ST-yb*ZP-14;
+    mel.setAttribute('cy',cy.toFixed(1));if(v>0.1)mv.set(WX+34,cy-v*2.6,WX+34,cy);else mv.hide();
+    const zy=ST-zero*ZP;zLine.setAttribute('y1',zy);zLine.setAttribute('y2',zy);
+    lev.forEach(L=>{L.t.textContent='y = '+fx(L.h-zero,0)+' m';L.t.style.fill=L.h===zero?'var(--accent)':'';L.t.style.fontWeight=L.h===zero?'700':''});
+    const Ui=mW*g10*(11-zero),Uf=mW*g10*(-3-zero),Kf=Ui-Uf;
+    bZ.setScale(Kf);bZ.set({Ki:0,Ui,Kf,Uf});
+    eZ1.set('Ui',Jz(Ui));eZ2.set('Uf',Jz(Uf));eZ3.set('dU',Jz(Uf-Ui));eZ4.set('v',fx(Math.sqrt(2*Kf/mW),1)+NB+'m/s');
+    pb.liveSet('y',mfmt(yb-zero));pb.liveSet('v',vfmt(-v));pb.liveSet('U',Jz(mW*g10*(yb-zero)))}
+  function resetZ(){running=false;pb.set(false);zt=0;zPre.mark(zero);drawZ()}
+  function setView(k){V=k;mode.set(k);gT.style.display=k==='toss'?'':'none';gZ.style.display=k==='zero'?'':'none';
+    for(const s in SIDE)SIDE[s].forEach(e=>e.hidden=s!==k);[...SIDE[k]].reverse().forEach(e=>ctx.side.prepend(e));
+    running=false;pb.set(false);
+    if(k==='toss'){pb.liveDef([['y','<i>y</i>'],['v','<i>v<sub>y</sub></i>'],['K','<i>K</i>'],['U','<i>U</i><sub>G</sub>']]);reset();
+      ctx.cap.innerHTML='Bar heights are energies in joules. The bar on the right is the total, '+M('<i>K</i> + <i>U</i><sub>G</sub>')+', and it never changes.'}
+    else{pb.liveDef([['y','<i>y</i>'],['v','<i>v<sub>y</sub></i>'],['U','<i>U</i><sub>G</sub>']]);resetZ();
+      ctx.cap.innerHTML='Try each choice of '+M('<i>y</i> = 0')+'. The potential energy bars move up or down together, but the final kinetic energy is always the same.'}
+    relayout(svg)}
+  setView('toss');
+  return {step(dt){if(!running)return;
+      if(V==='toss'){const T=2*vS.get()/g10;t=Math.min(T,t+dt*0.8);if(t>=T){running=false;pb.set(false)}drawT()}
+      else{zt=Math.min(TZ(),zt+dt*0.7);if(zt>=TZ()){running=false;pb.set(false)}drawZ()}},
+    toggle:()=>pb.el.click(),reset:()=>V==='toss'?reset():resetZ(),deactivate(){running=false;pb.set(false)},view:v=>setView(v)};
+}});
+/* ================= 3. Speed depends only on height (slides 33-41, 59-60) ================= */
+tab({id:'height',label:'Speed and height',title:'Speed depends only on height',
+lede:'Gravity’s work depends only on the vertical displacement, and a frictionless surface’s normal force does no work. So the speed depends only on how far an object descends, not on the shape of its path: '+M('<i>v</i><sub>f</sub> = √<span class="rad"><i>v</i><sub>i</sub><sup>2</sup> + 2<i>gh</i></span>')+'.',
+questions:['QC10.2','QC10.3','QC10.8'],
+build(ctx){
+  const svg=S('svg',{viewBox:'0 0 1000 560',role:'img','aria-label':'Four frictionless slides of the same height, or three balls thrown from a cliff'},ctx.stage);
+  const hid=hatchPat(svg);
+  /* ---------- four slides (QuickCheck 10.3) ---------- */
+  const gS=S('g',{},svg),DH=150;
+  const SH={A:[[0,0],[90,DH]],B:[[0,0],[300,DH]],C:'q',D:'q'};
+  const quad=(c,e)=>{const P=[];for(let i=0;i<=200;i++){const t=i/200,u=1-t;P.push([2*u*t*c[0]+t*t*e[0],2*u*t*c[1]+t*t*e[1]])}return P};
+  const shape={A:[[0,0],[90,DH]],B:[[0,0],[300,DH]],C:quad([16,DH],[270,DH]),D:quad([190,36],[270,DH])};
+  const P0={A:[60,92],B:[540,92],C:[60,342],D:[540,342]};
+  const sl={};
+  ['A','B','C','D'].forEach(n=>{const [ox,oy]=P0[n],pts=shape[n].map(([x,y])=>[ox+x,oy+y]);
+    ground(gS,ox-30,ox+340,oy+DH,hid);
+    S('polyline',{points:polyPts(pts),style:'fill:none;stroke:var(--wood);stroke-width:7;stroke-linecap:round;stroke-linejoin:round'},gS);
+    txt(gS,ox-34,oy+4,n,'big');
+    const ball=S('circle',{r:12,class:'obj2'},gS),out=txt(gS,ox+340,oy+DH+40,'','small','end');
+    const tr=arcTrack(pts);
+    sl[n]={pts,tr,ball,out,ox,oy,s:0,v:0,t:0,done:false}});
+  const hT=txt(gS,500,44,'','strong','middle');
+  /* ---------- three balls from a cliff (QuickCheck 10.8) ---------- */
+  /* 70° down, level, and 70° up keep the three landing points at least 3.6 m (40 px) apart for every slider setting below */
+  const gC=S('g',{},svg),GY=500,CX=150,PXM=11,ANG={A:-70,B:0,C:70};
+  ground(gC,40,980,GY,hid);
+  const cliff=S('rect',{x:40,width:CX-40,style:'fill:var(--rule-2);stroke:var(--ground);stroke-width:3'},gC);
+  const cb={};
+  ['A','B','C'].forEach(n=>{const tr=S('polyline',{class:'dim dash'},gC),b=S('circle',{r:11,class:'obj2'},gC),lab=txt(gC,0,0,n,'strong','middle'),va=new Arrow(gC,'c-v',{w:4});
+    cb[n]={tr,b,lab,va,out:txt(gC,960,0,'','small','end')}});
+  txt(gC,960,58,'Speed just before landing','strong','end');['A','B','C'].forEach((n,i)=>cb[n].out.setAttribute('y',96+i*36));
+  const hC=txt(gC,CX-12,0,'','small','end');
+  /* ---------- side panel ---------- */
+  const mode=ctx.modes([{v:'slides',label:'Four slides'},{v:'cliff',label:'Thrown from a cliff'}],'slides',v=>setView(v));
+  const aA=Sec(ctx.side,'Try it');
+  const aPre=Chips([{v:'qc',label:'QuickCheck 10.3: from rest'},{v:'sled',label:'Example 10.3: sled at 2.0 m/s'}],k=>{if(k==='qc'){hS.set(3);viS.set(0)}else{hS.set(5);viS.set(2)}resetS()});
+  const hS=Slider({label:'Height <i>h</i>',min:1,max:5,step:0.5,value:3,unit:'m',onInput:()=>{aPre.mark(null);resetS()}});
+  const viS=Slider({label:'Starting speed <i>v</i><sub>i</sub>',min:0,max:4,step:0.5,value:0,unit:'m/s',onInput:()=>{aPre.mark(null);resetS()}});
+  aA.append(aPre.el,hS.el,viS.el);aPre.mark('qc');
+  const aB=Sec(ctx.side,'Speed at the bottom');
+  Eq(aB,'½<i>mv</i><sub>f</sub><sup>2</sup> = ½<i>mv</i><sub>i</sub><sup>2</sup> + <i>mgh</i>','small');
+  const eS=Eq(aB,'<i>v</i><sub>f</sub> = √<span class="rad"><i>v</i><sub>i</sub><sup>2</sup> + 2<i>gh</i></span> = {v}');
+  aB.append(note('All four slides give the same speed at the bottom, but not the same time. A slide that is steep at the start gets her moving fast sooner.'),
+    keyIdea('with no friction, the speed depends only on how far she descends, not on the shape of the slide.'));
+  const cA=Sec(ctx.side,'Try it');
+  const HS=Slider({label:'Cliff height <i>h</i>',min:10,max:30,step:1,value:20,unit:'m',onInput:()=>resetC()});
+  const v0S=Slider({label:'Launch speed <i>v</i><sub>0</sub>',min:8,max:15,step:0.5,value:10,unit:'m/s',onInput:()=>resetC()});
+  cA.append(note('Ball A is thrown 70° below level, ball B level, and ball C 70° above level, all at the same speed.'),HS.el,v0S.el);
+  const cB=Sec(ctx.side,'Speed at the ground');
+  const eC=Eq(cB,'<i>v</i><sub>f</sub> = √<span class="rad"><i>v</i><sub>0</sub><sup>2</sup> + 2<i>gh</i></span> = {v}');
+  cB.append(note('Each ball starts with the same kinetic energy and falls through the same height, so each gains the same kinetic energy. Their directions differ, but their speeds are equal.'),
+    keyIdea('energy tells you the speed, not the direction.'));
+  const SIDE={slides:[aA,aB],cliff:[cA,cB]};
+  /* ---------- state ---------- */
+  let V='slides',running=false,ct=0;
+  const pb=PlayBar(ctx,{onToggle:()=>{if(V==='slides'&&Object.values(sl).every(o=>o.done))resetS();if(V==='cliff'&&cDone())resetC();running=!running;pb.set(running)},onReset:()=>V==='slides'?resetS():resetC()});
+  /* playback speed for the cliff throws: replay them slower or faster. Only the animation changes; the speeds shown are the real ones. */
+  let cRate=1;
+  const spdL=H('span',{text:'Speed',style:'font-size:16px;font-weight:700;color:var(--muted)'});
+  const spd=Seg([{v:0.25,label:'¼×'},{v:0.5,label:'½×'},{v:1,label:'1×'},{v:2,label:'2×'},{v:4,label:'4×'}],1,v=>{cRate=v},'Playback speed');spd.el.style.flex='none';
+  spd.el.title='Play the throws slower or faster';
+  const spdBox=H('div',{style:'display:inline-flex;align-items:center;gap:8px;flex:none'},spdL,spd.el);ctx.bar.insertBefore(spdBox,pb.liveEl);
+  const vf=()=>Math.sqrt(viS.get()**2+2*g10*hS.get());
+  function drawS(){const h=hS.get(),k=h/DH;   /* meters per drawn pixel: the shapes are drawn to scale */
+    hT.textContent='Every slide is '+fx(h,1)+' m high';
+    for(const n in sl){const o=sl[n],[x,y,a]=o.tr.at(o.s/k),nx=-Math.sin(a),ny=Math.cos(a);
+      o.ball.setAttribute('cx',(x-nx*13).toFixed(1));o.ball.setAttribute('cy',(y-ny*13).toFixed(1));
+      o.out.textContent=o.done?fx(vf(),1)+' m/s after '+fx(o.t,2)+' s':(o.t>0?fx(o.v,1)+' m/s':'')}
+    eS.set('v',fx(vf(),1)+NB+'m/s');
+    const L=sl;pb.liveSet('A',fx(L.A.v,1));pb.liveSet('B',fx(L.B.v,1));pb.liveSet('C',fx(L.C.v,1));pb.liveSet('D',fx(L.D.v,1))}
+  function resetS(){running=false;pb.set(false);for(const n in sl)Object.assign(sl[n],{s:0,v:viS.get(),t:0,done:false});drawS()}
+  function stepS(dt){const h=hS.get(),k=h/DH,vi=viS.get();
+    for(const n in sl){const o=sl[n];if(o.done)continue;const L=o.tr.L*k;let rem=dt;
+      while(rem>1e-9){const d=Math.min(rem,0.002),[,y0]=o.tr.at(o.s/k),[,y1]=o.tr.at(o.s/k+0.5),sin=(y1-y0)/0.5;
+        o.v+=g10*sin*d;o.s+=o.v*d;o.t+=d;rem-=d;
+        if(o.s>=L){o.s=L;o.done=true;o.v=vf();break}
+        const yy=o.tr.at(o.s/k)[1]-o.oy;o.v=Math.max(o.v,0);const ve=Math.sqrt(Math.max(0,vi*vi+2*g10*yy*k));if(o.v>0.05)o.v=ve}}
+    if(Object.values(sl).every(o=>o.done)){running=false;pb.set(false)}drawS()}
+  /* cliff */
+  const cTraj=n=>{const v0=v0S.get(),a=ANG[n]*DEG;return {vx:v0*Math.cos(a),vy:v0*Math.sin(a)}};
+  const cT=n=>{const {vy}=cTraj(n),H=HS.get();return (vy+Math.sqrt(vy*vy+2*g10*H))/g10};
+  const cDone=()=>['A','B','C'].every(n=>ct>=cT(n)-1e-9);
+  function drawC(){const H=HS.get(),top=GY-H*PXM,vF=Math.sqrt(v0S.get()**2+2*g10*H);
+    cliff.setAttribute('y',top);cliff.setAttribute('height',H*PXM);hC.setAttribute('y',(top+H*PXM/2).toFixed(1));hC.textContent='h = '+H+' m';
+    for(const n of ['A','B','C']){const {vx,vy}=cTraj(n),T=cT(n),t=Math.min(ct,T),o=cb[n];
+      const P=[];for(let i=0;i<=40;i++){const s=t*i/40;P.push([CX+vx*s*PXM,top-(vy*s-0.5*g10*s*s)*PXM])}
+      o.tr.setAttribute('points',polyPts(P));const [bx,by]=P[40];o.b.setAttribute('cx',bx.toFixed(1));o.b.setAttribute('cy',(by-11).toFixed(1));
+      o.lab.setAttribute('x',bx.toFixed(1));o.lab.setAttribute('y',(by-30).toFixed(1));o.lx=bx;o.ly=by;
+      const vyt=vy-g10*t,sp=Math.hypot(vx,vyt);
+      if(t>=T-1e-9){o.va.set(bx,by-11,bx+vx*2.6,by-11-vyt*2.6);o.out.textContent=n+': '+fx(sp,1)+' m/s'}else{o.va.hide();o.out.textContent=n+': in the air'}
+      pb.liveSet(n,fx(sp,1))}
+    /* a ball's letter shows only once it is clear of the other balls, so letters never pile up near the cliff edge */
+    const L=['A','B','C'];L.forEach(n=>{const o=cb[n],clear=L.every(m=>m===n||Math.abs(cb[m].lx-o.lx)>36||Math.abs(cb[m].ly-o.ly)>40);o.lab.style.display=clear?'':'none'});
+    eC.set('v',fx(vF,1)+NB+'m/s')}
+  function resetC(){running=false;pb.set(false);ct=0;drawC()}
+  function setView(k){V=k;mode.set(k);gS.style.display=k==='slides'?'':'none';gC.style.display=k==='cliff'?'':'none';
+    for(const s in SIDE)SIDE[s].forEach(e=>e.hidden=s!==k);[...SIDE[k]].reverse().forEach(e=>ctx.side.prepend(e));
+    spdBox.hidden=k!=='cliff';
+    if(k==='slides'){pb.liveDef([['A','<i>v</i><sub>A</sub>'],['B','<i>v</i><sub>B</sub>'],['C','<i>v</i><sub>C</sub>'],['D','<i>v</i><sub>D</sub>']]);resetS();
+      ctx.cap.innerHTML='All four slides have the same height and no friction. Each ball shows its speed in m/s and, at the bottom, how long the trip took.'}
+    else{pb.liveDef([['A','<i>v</i><sub>A</sub>'],['B','<i>v</i><sub>B</sub>'],['C','<i>v</i><sub>C</sub>']]);resetC();
+      ctx.cap.innerHTML='Speeds are in m/s. The green arrows show each ball’s velocity just before it lands: different directions, same length. Use the speed buttons to replay the throws slower or faster.'}
+    relayout(svg)}
+  setView('slides');
+  return {step(dt){if(!running)return;if(V==='slides')stepS(dt*0.8);else{ct+=dt*0.8*cRate;if(cDone()){ct=Math.max(...['A','B','C'].map(cT));running=false;pb.set(false)}drawC()}},
+    toggle:()=>pb.el.click(),reset:()=>V==='slides'?resetS():resetC(),deactivate(){running=false;pb.set(false)},view:v=>setView(v)};
+}});
+/* ================= 4. Gravity and friction (slides 42-46) ================= */
+tab({id:'friction',label:'Gravity and friction',title:'Motion with gravity and friction',
+lede:'Friction increases the thermal energy of the system: '+M('Δ<i>E</i><sub>th</sub> = <i>f</i><sub>k</sub>Δ<i>s</i>')+'. Then '+M('Δ<i>K</i> + Δ<i>U</i><sub>G</sub> + Δ<i>E</i><sub>th</sub> = 0')+', so the mechanical energy '+M('<i>K</i> + <i>U</i><sub>G</sub>')+' is not conserved.',
+questions:['QC10.5'],
+build(ctx){
+  const svg=S('svg',{viewBox:'0 0 1000 560',role:'img','aria-label':'A box sliding down a slope onto a level floor, with energy bars'},ctx.stage);
+  const hid=hatchPat(svg),PX=60,TH=30*DEG,Hm=3,Lr=Hm/Math.sin(TH),Lf=8.6,FY=440,X0=112,Y0=FY-Hm*PX,XB=X0+Lr*Math.cos(TH)*PX,m=10;
+  S('path',{d:`M${X0} ${Y0}L${XB} ${FY}L${XB+Lf*PX} ${FY}`,style:'fill:none;stroke:var(--ground);stroke-width:4;stroke-linejoin:round'},svg);
+  S('path',{d:`M${X0} ${Y0}L${XB} ${FY}L${X0} ${FY}Z`,style:'fill:var(--rule-2)'},svg);ground(svg,X0,XB+Lf*PX,FY,hid);
+  const warm=S('polyline',{style:'fill:none;stroke:var(--Eth);stroke-width:7;stroke-linecap:round;opacity:.7'},svg);
+  S('line',{x1:X0-18,x2:X0-18,y1:Y0,y2:FY,class:'dim'},svg);txt(svg,X0-24,(Y0+FY)/2+8,'3.0 m','small','end');
+  txt(svg,XB-90,FY-14,'30°','small muted');
+  const box=S('g',{},svg);S('rect',{x:-24,y:-46,width:48,height:46,rx:4,class:'obj'},box);
+  const vA=new Arrow(svg,'c-v',{label:'{v}',off:22}),fA=new Arrow(svg,'c-F',{label:'{f}_k',off:22});
+  const bars=EBars(svg,{x:560,y0:280,up:190,keys:[['K','K','K'],['U','U','U_G'],['E','E','ΔE_(th)']],total:true,totalLabel:'|total|'});
+  txt(svg,540,52,'Energy of box + slope + earth','strong');
+  /* side panel */
+  const sA=Sec(ctx.side,'Try it');
+  const pre=Chips([{v:'none',label:'No friction'},{v:'some',label:'With friction'},{v:'skier',label:'Skier at constant speed'}],k=>preset(k));
+  const muS=Slider({label:'Kinetic friction <i>μ</i><sub>k</sub>',min:0,max:0.7,step:0.01,value:0.25,dec:2,onInput:()=>{pre.mark(null);reset()}});
+  const viS=Slider({label:'Starting speed <i>v</i><sub>i</sub>',min:0,max:4,step:0.5,value:0,unit:'m/s',onInput:()=>{pre.mark(null);reset()}});
+  sA.append(pre.el,muS.el,viS.el,hint('The box has a mass of 10 kg. The slope is 30° and 3.0 m high, and the floor has the same friction.'));
+  const sB=Sec(ctx.side,'Energy principle');
+  Eq(sB,'Δ<i class="qK">K</i> + Δ<i class="qU">U</i><sub>G</sub> + Δ<i class="qE">E</i><sub>th</sub> = 0','small');
+  const eE=Eq(sB,'Δ<i class="qE">E</i><sub>th</sub> = <i>f</i><sub>k</sub>Δ<i>s</i> = {E}','small');
+  const eS=Eq(sB,'{dK} + {dU} + {E} = 0','small');
+  const nB=note('');sB.append(nB,keyIdea('friction lowers the mechanical energy '+M('<i>K</i> + <i>U</i><sub>G</sub>')+', but the total including thermal energy stays the same.'));
+  /* state */
+  let running=false,s=0,v=0,E=0,cur=null;
+  const pb=PlayBar(ctx,{onToggle:()=>{if(ended())reset();running=!running;pb.set(running)},onReset:()=>reset()});
+  pb.liveDef([['s','<i>s</i>'],['v','<i>v</i>'],['E','Δ<i>E</i><sub>th</sub>']]);
+  const yOf=s=>s<Lr?Hm-s*Math.sin(TH):0;
+  const ended=()=>s>=Lr+Lf-1e-6||(v<=1e-6&&s>0&&!canStart());
+  const canStart=()=>s<Lr&&muS.get()<Math.tan(TH);
+  function pos(s){if(s<Lr){const d=s*PX;return [X0+d*Math.cos(TH),Y0+d*Math.sin(TH),TH]}return [XB+(s-Lr)*PX,FY,0]}
+  function draw(){const vi=viS.get(),U0=m*g10*Hm,U=m*g10*yOf(s),K=0.5*m*v*v,K0=0.5*m*vi*vi;
+    const [x,y,a]=pos(s);box.setAttribute('transform',`translate(${x.toFixed(1)},${y.toFixed(1)}) rotate(${(a/DEG).toFixed(1)})`);
+    const ux=Math.cos(a),uy=Math.sin(a),nx=Math.sin(a),ny=-Math.cos(a),cx=x+nx*23,cy=y+ny*23;
+    if(v>0.05){vA.set(cx+nx*40,cy+ny*40,cx+nx*40+ux*v*16,cy+ny*40+uy*v*16)}else vA.hide();
+    if(muS.get()>0&&(v>0.05||s===0&&vi>0)){fA.set(x-ux*26,y-uy*26-2,x-ux*(26+muS.get()*90),y-uy*(26+muS.get()*90)-2)}else fA.hide();
+    const P=[];for(let i=0;i<=20;i++)P.push(pos(s*i/20).slice(0,2));warm.setAttribute('points',polyPts(P));warm.style.display=E>0.05?'':'none';
+    bars.setScale(U0+K0);bars.set({K,U,E});
+    eE.set('E',Jz(E));eS.setAll({dK:paren(Jz(K-K0)),dU:paren(Jz(U-U0)),E:paren(Jz(E))});
+    const mu=muS.get(),tan=Math.tan(TH);
+    nB.innerHTML=mu===0?'With no friction, '+M('<i>U</i><sub>G</sub> → <i>K</i>')+': all the potential energy the box loses becomes kinetic energy.':
+      Math.abs(mu-tan)<0.006?'With '+M('<i>μ</i><sub>k</sub> = tan 30° = 0.58')+', friction exactly balances gravity on the slope. The speed stays constant, so '+M('<i>U</i><sub>G</sub> → <i>E</i><sub>th</sub>')+'.':
+      'With friction, '+M('<i>U</i><sub>G</sub> → <i>K</i> + <i>E</i><sub>th</sub>')+'. Part of the lost potential energy warms the box and the surface.';
+    pb.liveSet('s',mfmt(s));pb.liveSet('v',vfmt(v));pb.liveSet('E',Jz(E))}
+  function reset(){running=false;pb.set(false);s=0;v=viS.get();E=0;draw()}
+  function preset(k){cur=k;pre.mark(k);if(k==='none'){muS.set(0);viS.set(0)}else if(k==='some'){muS.set(0.25);viS.set(0)}else{muS.set(Math.round(Math.tan(TH)*100)/100);viS.set(2)}reset()}
+  function step(dt){let rem=dt;const mu=muS.get();
+    while(rem>1e-9&&running){const d=Math.min(rem,0.004);rem-=d;
+      const onR=s<Lr,a=onR?g10*Math.sin(TH)-mu*g10*Math.cos(TH):-mu*g10,f=onR?mu*m*g10*Math.cos(TH):mu*m*g10;
+      if(v<=1e-9&&a<=0){v=0;running=false;pb.set(false);break}
+      let v1=v+a*d;if(v1<0){const dd=v*v/(2*Math.max(1e-9,-a));s+=dd;E+=f*dd;v=0;running=false;pb.set(false);break}
+      const ds=(v+v1)/2*d;s+=ds;E+=f*ds;v=v1;
+      if(s>=Lr+Lf){s=Lr+Lf;running=false;pb.set(false)}}
+    /* keep the books exact: K + U + E_th stays at its starting value */
+    if(v>0){const tot=0.5*m*viS.get()**2+m*g10*Hm,K=tot-m*g10*yOf(s)-E;v=K>0?Math.sqrt(2*K/m):0}draw()}
+  preset('some');
+  ctx.cap.innerHTML='Bars are energies in joules, measured from the start; '+M('<i>U</i><sub>G</sub>')+' is zero at the floor. The orange stripe marks the warmed surface.';
+  return {step(dt){if(running)step(dt*0.9)},toggle:()=>pb.el.click(),reset,deactivate(){running=false;pb.set(false)},preset:k=>{preset(k);running=true;pb.set(true)}};
+}});
+/* ================= 5. Elastic potential energy (slides 47-52) ================= */
+tab({id:'elastic',label:'Elastic PE',title:'Elastic potential energy',
+lede:'A spring stores elastic potential energy '+M('<i>U</i><sub>Sp</sub> = ½<i>k</i>(Δ<i>s</i>)<sup>2</sup>')+', where Δ<i>s</i> is how far it is stretched or compressed from its equilibrium length. It belongs to the spring + attached objects system.',
+questions:['QC10.6','QC10.7'],
+build(ctx){
+  const svg=S('svg',{viewBox:'0 0 1000 560',role:'img','aria-label':'A spring-loaded launcher and energy bars'},ctx.stage);
+  const hid=hatchPat(svg);
+  /* ---------- spring gun ---------- */
+  const gG=S('g',{},svg),TY=380,XE=400,PXC=18,mB=0.025,BR=15,SL=0.04;
+  ground(gG,60,960,TY,hid);
+  S('rect',{x:88,y:TY-66,width:326,height:58,rx:6,style:'fill:var(--rule-2);stroke:var(--obj-stroke);stroke-width:2.5'},gG);
+  S('line',{x1:100,x2:100,y1:TY-62,y2:TY-12,style:'stroke:var(--obj-stroke);stroke-width:6'},gG);
+  const spr=S('path',{class:'spring',style:'stroke-width:3.2'},gG),plg=S('rect',{y:TY-60,width:10,height:46,rx:2,class:'obj2'},gG);
+  const ball=S('circle',{r:BR,cy:TY-BR-8,class:'obj2'},gG);
+  S('line',{x1:XE,x2:XE,y1:TY-110,y2:TY-6,class:'dim dash'},gG);txt(gG,XE,TY-118,'equilibrium','small muted','middle');
+  const dsA=new Arrow(gG,'c-d',{w:3.5}),dsT=txt(gG,0,TY-150,'','small','middle');
+  const bv=new Arrow(gG,'c-v',{label:'{v}',off:22});
+  const bG=EBars(gG,{x:600,y0:250,up:170,bw:64,ow:54,keys:[['U','USp','U_(Sp)'],['K','K','K']],total:true,totalLabel:'|total|'});
+  /* ---------- vertical launcher with gravity ---------- */
+  const gV=S('g',{},svg),VB=520,VX=300,PY=150,L0=0.8,kV=100,mV=0.2;
+  ground(gV,120,480,VB,hid);
+  const vspr=S('path',{class:'spring',style:'stroke-width:3.2'},gV),plate=S('rect',{x:VX-34,width:68,height:8,rx:3,class:'obj2'},gV);
+  const vball=S('circle',{r:16,cx:VX,class:'obj2'},gV),vv=new Arrow(gV,'c-v',{label:'{v}',off:22});
+  S('line',{x1:VX-70,x2:VX+70,y1:VB-L0*PY,y2:VB-L0*PY,class:'dim dash'},gV);txt(gV,VX+78,VB-L0*PY+8,'equilibrium','small muted');
+  const topL=S('line',{x1:VX-70,x2:VX+70,class:'dim dash'},gV),topT=txt(gV,VX+78,0,'','small');
+  const bV=EBars(gV,{x:600,y0:430,up:300,bw:58,ow:36,keys:[['S','USp','U_(Sp)'],['K','K','K'],['G','U','U_G']],total:true,totalLabel:'|total|'});
+  /* ---------- side panel ---------- */
+  const mode=ctx.modes([{v:'gun',label:'Spring-loaded gun'},{v:'vert',label:'Spring and gravity'}],'gun',v=>setView(v));
+  const gA=Sec(ctx.side,'Try it');
+  const pre=Chips([{v:'base',label:'Launch at 2.0 m/s'},{v:'d2',label:'Compress twice as far'},{v:'k2',label:'Twice the spring constant'}],k=>preset(k));
+  const kS=Slider({label:'Spring constant <i>k</i>',min:20,max:160,step:5,value:40,unit:'N/m',onInput:()=>{pre.mark(null);reset()}});
+  const dS=Slider({label:'Compression Δ<i>s</i>',min:1,max:10,step:0.5,value:5,unit:'cm',onInput:()=>{pre.mark(null);reset()}});
+  const gHint=hint('');gA.append(pre.el,kS.el,dS.el,gHint);
+  const gB=Sec(ctx.side,'Launch speed');
+  Eq(gB,'<i class="qUs">U</i><sub>Sp</sub> = ½<i>k</i>(Δ<i>s</i>)<sup>2</sup>','big');
+  Eq(gB,'½<i>k</i>(Δ<i>s</i>)<sup>2</sup> = ½<i>mv</i><sup>2</sup>','small');
+  const eV=Eq(gB,'<i>v</i> = Δ<i>s</i>√<span class="rad"><i>k</i>/<i>m</i></span> = {v}');
+  const nG=note('');gB.append(nG,keyIdea('the launch speed is proportional to Δ<i>s</i> but only to √<i>k</i>.'));
+  const vA=Sec(ctx.side,'Try it');
+  const vdS=Slider({label:'Compression Δ<i>s</i>',min:0.1,max:0.3,step:0.02,value:0.3,unit:'m',dec:2,onInput:()=>resetV()});
+  vA.append(vdS.el,hint('A 0.20 kg ball sits on a spring with <i>k</i> = 100 N/m. '+M('<i>U</i><sub>G</sub> = 0')+' where the ball starts.'));
+  const vB=Sec(ctx.side,'Energy principle');
+  Eq(vB,'Δ<i class="qK">K</i> + Δ<i class="qU">U</i><sub>G</sub> + Δ<i class="qUs">U</i><sub>Sp</sub> + Δ<i class="qE">E</i><sub>th</sub> = 0','small');
+  const eH=Eq(vB,'highest point: <i>y</i> = ½<i>k</i>(Δ<i>s</i>)<sup>2</sup>/<i>mg</i> = {y}','small');
+  vB.append(note('While the spring pushes, '+M('<i>U</i><sub>Sp</sub>')+' turns into both '+M('<i>K</i>')+' and '+M('<i>U</i><sub>G</sub>')+'. After the ball leaves the spring, '+M('<i>K</i>')+' turns into '+M('<i>U</i><sub>G</sub>')+'.'),
+    keyIdea('with no friction or external work, the total stays the same however many kinds of energy are involved.'));
+  const SIDE={gun:[gA,gB],vert:[vA,vB]};
+  /* ---------- state ---------- */
+  let V='gun',running=false,t=0,vy=0,yy=0,vt=0;
+  const pb=PlayBar(ctx,{onToggle:()=>{if(V==='gun'&&gunDone())reset();if(V==='vert'&&vDone)resetV();running=!running;pb.set(running)},onReset:()=>V==='gun'?reset():resetV()});
+  /* playback speed for the vertical launch: slower, normal, or faster. Only the animation changes; the energies shown are the real ones. */
+  const RATES=[0.125,0.25,0.5,0.75,1,1.5,2,3,4],RLAB=['⅛×','¼×','½×','¾×','1×','1.5×','2×','3×','4×'];let vRate=1;const rIdx={gun:4,vert:4};   /* each view keeps its own speed setting */
+  const rIn=H('input',{type:'range',min:0,max:8,step:1,value:4,'aria-label':'Playback speed',title:'Drag left to slow down, right to speed up',style:'width:160px;flex:none'});
+  const rOut=H('output',{class:'ctl-v',style:'min-width:7.4em;font-size:16.5px'});
+  const showR=()=>{const k=+rIn.value;vRate=RATES[k];rOut.textContent=RLAB[k]+NB+(k<4?'slower':k>4?'faster':'normal');rIn.style.setProperty('--p',(k/8*100)+'%');
+    gHint.innerHTML='The ball’s mass is 25 g. At this speed the motion is shown '+(n=>Math.abs(n-Math.round(n))<1e-9?String(Math.round(n)):num(n,3))(25/vRate)+' times slower than real time.'};showR();
+  rIn.addEventListener('input',()=>{rIdx[V]=+rIn.value;showR()});
+  const rBox=H('div',{style:'display:inline-flex;align-items:center;gap:8px;flex:none'},H('span',{text:'Speed',style:'font-size:16px;font-weight:700;color:var(--muted)'}),rIn,rOut);
+  ctx.bar.insertBefore(rBox,pb.liveEl);
+  const om=()=>Math.sqrt(kS.get()/mB),vLaunch=()=>dS.get()/100*om();
+  let gx=0;const gunDone=()=>gx>=1;
+  function drawG(){const ds=dS.get(),w=om(),Tq=Math.PI/2/w,tt=t;
+    let comp,vb,xb;   /* compression in cm, ball speed, ball position */
+    if(tt<Tq){comp=ds*Math.cos(w*tt);vb=ds/100*w*Math.sin(w*tt)}else{comp=0;vb=vLaunch()}
+    const xp=XE-comp*PXC;
+    xb=tt<Tq?xp+10+BR:XE+10+BR+(tt-Tq)*vb*100*PXC;gx=(xb-(XE+10+BR))/430;
+    spr.setAttribute('d',springPath(100,TY-37,xp,10,15));plg.setAttribute('x',xp.toFixed(1));
+    ball.setAttribute('cx',Math.min(xb,950).toFixed(1));
+    if(comp>0.05){dsA.set(XE,TY-138,xp,TY-138);dsT.setAttribute('x',((XE+xp)/2).toFixed(1));dsT.textContent='Δs = '+fx(comp,1)+' cm'}else{dsA.hide();dsT.textContent=''}
+    if(vb>0.02)bv.set(Math.min(xb,950),TY-62,Math.min(xb,950)+vb*28,TY-62);else bv.hide();
+    const U0=0.5*kS.get()*(ds/100)**2,U=0.5*kS.get()*(comp/100)**2;bG.setScale(Math.max(U0,1e-6));bG.set({U,K:U0-U});
+    eV.set('v',fx(vLaunch(),2)+NB+'m/s');
+    pb.liveSet('s',fx(comp,1)+NB+'cm');pb.liveSet('v',vfmt(vb));pb.liveSet('U',fx(U,3)+NB+'J');pb.liveSet('K',fx(U0-U,3)+NB+'J')}
+  function reset(){running=false;pb.set(false);t=0;gx=0;drawG();
+    const k=kS.get(),d=dS.get(),v=vLaunch();
+    nG.innerHTML=Math.abs(k-40)<1e-9&&Math.abs(d-10)<1e-9?'Twice the compression: four times the stored energy, so twice the speed, 4.0 m/s.':
+      Math.abs(k-80)<1e-9&&Math.abs(d-5)<1e-9?'Twice the spring constant: twice the stored energy, so √2 times the speed, 2.8 m/s.':
+      'Stored energy '+J(0.5*k*(d/100)**2,2)+' becomes the ball’s kinetic energy.'}
+  function preset(k){pre.mark(k);if(k==='base'){kS.set(40);dS.set(5)}else if(k==='d2'){kS.set(40);dS.set(10)}else{kS.set(80);dS.set(5)}reset()}
+  let vDone=false;
+  function drawV(){const ds=vdS.get(),yc=VB-L0*PY-yy*PY;   /* yy: plate or ball height relative to the spring's equilibrium, upward */
+    const plateY=Math.max(yy,0)>0?VB-L0*PY:yc;
+    vspr.setAttribute('d',springV(VX,VB,plateY,8,14));plate.setAttribute('y',(plateY-8).toFixed(1));
+    vball.setAttribute('cy',(yc-8-16).toFixed(1));
+    if(Math.abs(vy)>0.05)vv.set(VX+40,yc-24,VX+40,yc-24-vy*9);else vv.hide();
+    const h0=-ds,Utot=0.5*kV*ds*ds,ymax=Utot/(mV*g10);
+    topL.setAttribute('y1',VB-L0*PY-(h0+ymax)*PY-24);topL.setAttribute('y2',VB-L0*PY-(h0+ymax)*PY-24);topT.setAttribute('y',(VB-L0*PY-(h0+ymax)*PY-16).toFixed(1));topT.textContent='highest point';
+    const S_=yy<0?0.5*kV*yy*yy:0,G=mV*g10*(yy-h0),K=Math.max(0,Utot-S_-G);
+    bV.setScale(Utot);bV.set({S:S_,K,G});eH.set('y',fx(ymax,2)+NB+'m');
+    pb.liveSet('y',mfmt(yy-h0));pb.liveSet('v',vfmt(vy));pb.liveSet('S',Jz(S_));pb.liveSet('G',Jz(G))}
+  function resetV(){running=false;pb.set(false);yy=-vdS.get();vy=0;vt=0;vDone=false;drawV()}
+  function stepV(dt){let rem=dt;while(rem>1e-9){const d=Math.min(rem,0.001);rem-=d;const a=(yy<0?-kV/mV*yy:0)-g10;vy+=a*d;yy+=vy*d;
+      if(vt>0.05&&yy<=-vdS.get()+0.002){yy=-vdS.get();vy=0;vDone=true;running=false;pb.set(false);break}vt+=d}drawV()}
+  function setView(k){V=k;mode.set(k);gG.style.display=k==='gun'?'':'none';gV.style.display=k==='vert'?'':'none';
+    for(const s in SIDE)SIDE[s].forEach(e=>e.hidden=s!==k);[...SIDE[k]].reverse().forEach(e=>ctx.side.prepend(e));
+    rIn.value=rIdx[k];showR();
+    if(k==='gun'){pb.liveDef([['s','Δ<i>s</i>'],['v','<i>v</i>'],['U','<i>U</i><sub>Sp</sub>'],['K','<i>K</i>']]);reset();
+      ctx.cap.innerHTML='Bars are energies in joules. The spring’s stored energy becomes the ball’s kinetic energy by the time the spring reaches its equilibrium length. Drag the speed slider to watch it slower or faster.'}
+    else{pb.liveDef([['y','<i>y</i>'],['v','<i>v<sub>y</sub></i>'],['S','<i>U</i><sub>Sp</sub>'],['G','<i>U</i><sub>G</sub>']]);resetV();vt=0;
+      ctx.cap.innerHTML='Bars are energies in joules. The ball rises, stops at its highest point, and falls back onto the spring. Drag the speed slider to watch it slower or faster.'}
+    relayout(svg)}
+  preset('base');setView('gun');
+  return {step(dt){if(!running)return;if(V==='gun'){t+=dt*SL*vRate;if(gunDone()){running=false;pb.set(false)}drawG()}else stepV(dt*0.5*vRate)},
+    toggle:()=>pb.el.click(),reset:()=>V==='gun'?reset():resetV(),deactivate(){running=false;pb.set(false)},view:v=>setView(v),
+    preset:k=>{setView('gun');preset(k)}};
+}});
+/* ================= 6. Conservation of energy (slides 53-62) ================= */
+tab({id:'conserve',label:'Conservation of energy',title:'Conservation of energy',
+lede:'The total energy '+M('<i>E</i><sub>sys</sub> = <i>K</i> + <i>U</i> + <i>E</i><sub>th</sub>')+' of an isolated system is constant. If the system also has no friction, its mechanical energy '+M('<i>E</i><sub>mech</sub> = <i>K</i> + <i>U</i>')+' is conserved: '+M('<i>K</i><sub>i</sub> + <i>U</i><sub>i</sub> = <i>K</i><sub>f</sub> + <i>U</i><sub>f</sub>')+'.',
+questions:['RQ10.4','QC10.4','QC10.9'],
+build(ctx){
+  const svg=S('svg',{viewBox:'0 0 1000 560',role:'img','aria-label':'A swinging pendulum, or a puck sliding toward a hill, with energy bars'},ctx.stage);
+  const hid=hatchPat(svg);
+  /* ---------- pendulum (Example 10.7) ---------- */
+  const gP=S('g',{},svg),PX0=340,PY0=70,L=0.78,PXM=330,mP=0.15;
+  S('line',{x1:PX0-90,x2:PX0+90,y1:PY0,y2:PY0,style:'stroke:var(--obj-stroke);stroke-width:5'},gP);
+  S('line',{x1:PX0,x2:PX0,y1:PY0,y2:PY0+L*PXM+30,class:'dim dash'},gP);
+  const arc=S('path',{class:'dim'},gP),angT=txt(gP,0,0,'','small');
+  const str=S('line',{style:'stroke:var(--ink-2);stroke-width:2.5'},gP),bob=S('circle',{r:19,class:'obj2'},gP);
+  const pv=new Arrow(gP,'c-v',{label:'{v}',off:22});
+  pv.lab.querySelectorAll('text').forEach(t=>t.style.cssText+=';paint-order:stroke;stroke:var(--surface);stroke-width:7px;stroke-linejoin:round');
+  const dyL=S('line',{class:'dim'},gP),dyT=txt(gP,0,0,'','small'),dyA=S('line',{class:'dim dash'},gP),dyB=S('line',{class:'dim dash'},gP);
+  const bP=EBars(gP,{x:652,y0:450,up:320,keys:[['K','K','K'],['U','U','U_G']],total:true,totalLabel:'K| + |U_G'});
+  /* ---------- puck and hill (QuickCheck 10.9) ---------- */
+  const gH=S('g',{},svg),FY=470,PXH=150,XR=380,RW=1.5,HH=1.0,XT=XR+RW*PXH,mH=0.17;
+  S('path',{d:`M60 ${FY}H${XR}L${XT} ${FY-HH*PXH}H960V${FY+30}H60Z`,style:'fill:#E4EFF5;stroke:var(--ground);stroke-width:3.5;stroke-linejoin:round'},gH);
+  /* the hill's height, marked at the left with dashed guides from the hilltop and the ice */
+  {const DX=50,yT=FY-HH*PXH;S('line',{x1:DX,x2:DX,y1:FY,y2:yT,style:'stroke:var(--ink-2);stroke-width:2.2'},gH);
+    [[yT,1],[FY,-1]].forEach(([y,sg])=>S('path',{d:`M${DX-7} ${y+sg*12}L${DX} ${y}L${DX+7} ${y+sg*12}`,style:'fill:none;stroke:var(--ink-2);stroke-width:2.2;stroke-linejoin:round'},gH));
+    S('line',{x1:DX-8,x2:XT,y1:yT,y2:yT,class:'dim dash'},gH);S('line',{x1:DX-8,x2:60,y1:FY,y2:FY,class:'dim dash'},gH);
+    txt(gH,DX+12,(FY+yT)/2+9,'1.0 m','small strong')}
+  const puck=S('g',{},gH);S('rect',{x:-22,y:-16,width:44,height:16,rx:4,style:'fill:var(--obj-stroke)'},puck);
+  const hv=new Arrow(gH,'c-v',{label:'{v}',off:22});
+  /* a halo keeps the moving label readable where it passes the dashed hilltop guide */
+  hv.lab.querySelectorAll('text').forEach(t=>t.style.cssText+=';paint-order:stroke;stroke:var(--surface);stroke-width:7px;stroke-linejoin:round');
+  const reachL=S('line',{class:'dim dash'},gH),reachT=txt(gH,0,0,'','small');
+  const bH=EBars(gH,{x:150,y0:236,up:160,keys:[['K','K','K'],['U','U','U_G']],total:true,totalLabel:'K| + |U_G'});
+  /* ---------- side panel ---------- */
+  const mode=ctx.modes([{v:'pend',label:'Pendulum'},{v:'hill',label:'Puck and a hill'}],'pend',v=>setView(v));
+  const pA=Sec(ctx.side,'Try it');
+  const pPre=Chips([{v:'ex',label:'Example 10.7: released at 60°'}],()=>{angS.set(60);resetP()});
+  const angS=Slider({label:'Release angle',min:10,max:80,step:5,value:60,unit:'°',onInput:()=>{pPre.mark(null);resetP()}});
+  pA.append(pPre.el,angS.el,hint('A 150 g ball on a 78 cm string. '+M('<i>U</i><sub>G</sub> = 0')+' at the lowest point.'));pPre.mark('ex');
+  const pB=Sec(ctx.side,'Speed at the bottom');
+  const eP1=Eq(pB,'Δ<i>y</i> = <i>L</i>(1 − cos θ) = {dy}','small');
+  const eP2=Eq(pB,'<i>v</i> = √<span class="rad">2<i>g</i>Δ<i>y</i></span> = {v}');
+  pB.append(note('The tension is always perpendicular to the motion, so it does no work. The ball + earth system is isolated and has no friction, so '+M('<i>K</i> + <i>U</i><sub>G</sub>')+' is conserved. The ball moves as fast as if it had simply fallen Δ<i>y</i>.'));
+  const pC=Sec(ctx.side,'Solving energy problems');
+  pC.append(H('ol',{class:'steps',html:'<li><b>Model:</b> choose the system and decide whether it is isolated and whether there is friction.</li><li><b>Visualize:</b> draw a before-and-after picture and an energy bar chart.</li><li><b>Solve:</b> use '+M('<i>K</i><sub>f</sub> + <i>U</i><sub>f</sub> + Δ<i>E</i><sub>th</sub> = <i>K</i><sub>i</sub> + <i>U</i><sub>i</sub> + <i>W</i><sub>ext</sub>')+'.</li><li><b>Review:</b> is the result reasonable?</li>'}));
+  const hA=Sec(ctx.side,'Try it');
+  const hPre=Chips([{v:'qc',label:'QuickCheck 10.9: 4 m/s'},{v:'fast',label:'5 m/s'}],k=>{hvS.set(k==='qc'?4:5);resetH()});
+  const hvS=Slider({label:'Puck speed <i>v</i><sub>i</sub>',min:2,max:6,step:0.25,value:4,unit:'m/s',dec:2,onInput:()=>{hPre.mark(null);resetH()}});
+  hA.append(hPre.el,hvS.el,hint('Smooth ice and a 1.0 m high hill: no friction.'));hPre.mark('qc');
+  const hB=Sec(ctx.side,'Will it reach the top?');
+  Eq(hB,'½<i>mv</i><sub>i</sub><sup>2</sup> ≥ <i>mgh</i> needs <i>v</i><sub>i</sub><sup>2</sup> ≥ 2<i>gh</i> = 19.6 m<sup>2</sup>/s<sup>2</sup>','small');
+  const eH=Eq(hB,'<i>v</i><sub>i</sub><sup>2</sup> = {v2}: {res}','small');
+  hB.append(keyIdea('the mass cancels, and so does the angle of the hill. Only the height matters.'));
+  const SIDE={pend:[pA,pB,pC],hill:[hA,hB]};
+  /* ---------- state ---------- */
+  let V='pend',running=false,th=0,om=0,s=0,hvv=0,hDone=false;
+  let pStarted=false;   /* the release-angle arc and label show only until the swing starts */
+  const pb=PlayBar(ctx,{onToggle:()=>{if(V==='hill'&&hDone)resetH();running=!running;pb.set(running);if(V==='pend'&&running&&!pStarted){pStarted=true;drawP()}},onReset:()=>V==='pend'?resetP():resetH()});
+  const spd=SpeedSlider(ctx,pb);
+  function drawP(){const a0=angS.get()*DEG,x=PX0+Math.sin(th)*L*PXM,y=PY0+Math.cos(th)*L*PXM;
+    str.setAttribute('x1',PX0);str.setAttribute('y1',PY0);str.setAttribute('x2',x.toFixed(1));str.setAttribute('y2',y.toFixed(1));
+    bob.setAttribute('cx',x.toFixed(1));bob.setAttribute('cy',y.toFixed(1));
+    arc.setAttribute('d',`M${PX0} ${PY0+90}A90 90 0 0 1 ${(PX0-90*Math.sin(a0)).toFixed(1)} ${(PY0+90*Math.cos(a0)).toFixed(1)}`);
+    angT.setAttribute('x',(PX0-Math.sin(a0/2)*112-8).toFixed(1));angT.setAttribute('y',(PY0+Math.cos(a0/2)*112+8).toFixed(1));angT.textContent=angS.get()+'°';angT.setAttribute('text-anchor','end');arc.style.display=angT.style.display=pStarted?'none':'';
+    const dy=L*(1-Math.cos(a0)),yLow=PY0+L*PXM,yTop=yLow-dy*PXM,xL=Math.max(78,PX0-L*PXM*Math.sin(a0)-46);
+    dyA.setAttribute('x1',xL-8);dyA.setAttribute('x2',PX0-L*PXM*Math.sin(a0));dyA.setAttribute('y1',yTop);dyA.setAttribute('y2',yTop);dyB.setAttribute('x1',xL-8);dyB.setAttribute('x2',PX0);dyB.setAttribute('y1',yLow);dyB.setAttribute('y2',yLow);dyL.setAttribute('x1',xL);dyL.setAttribute('x2',xL);dyL.setAttribute('y1',yTop);dyL.setAttribute('y2',yLow);dyT.setAttribute('x',xL-8);dyT.setAttribute('y',((yTop+yLow)/2+8).toFixed(1));dyT.setAttribute('text-anchor','end');dyT.textContent='Δy';
+    const v=om*L;if(Math.abs(v)>0.03){const ux=Math.cos(th),uy=-Math.sin(th);pv.set(x,y,x+ux*v*38,y+uy*v*38)}else pv.hide();
+    const U0=mP*g10*dy,U=mP*g10*L*(1-Math.cos(th));bP.setScale(Math.max(U0,1e-6));bP.set({K:Math.max(0,U0-U),U});
+    eP1.set('dy',fx(dy,2)+NB+'m');eP2.set('v',fx(Math.sqrt(2*g10*dy),2)+NB+'m/s');
+    pb.liveSet('a',fx(th/DEG,0)+'°');pb.liveSet('v',vfmt(Math.abs(v)));pb.liveSet('K',J(Math.max(0,U0-U),3));pb.liveSet('U',J(U,3))}
+  function resetP(){running=false;pb.set(false);pStarted=false;th=-angS.get()*DEG;om=0;drawP()}
+  function stepP(dt){let rem=dt;while(rem>1e-9){const d=Math.min(rem,0.002);rem-=d;om+=-(g10/L)*Math.sin(th)*d;th+=om*d}
+    const a0=angS.get()*DEG,w2=2*g10/L*(Math.cos(th)-Math.cos(a0));om=Math.sign(om||1)*Math.sqrt(Math.max(0,w2));drawP()}
+  /* hill: s is the distance along the ice and up the ramp, in meters */
+  const HX0=112,SR=(XR-HX0)/PXH,LR=Math.hypot(RW,HH),ang=Math.atan2(HH,RW);   /* the puck starts at x = HX0, clear of the height marker */
+  function hpos(s){if(s<SR)return [HX0+s*PXH,FY,0,0];if(s<SR+LR){const d=s-SR;return [XR+d*Math.cos(ang)*PXH,FY-d*Math.sin(ang)*PXH,-ang,d*Math.sin(ang)]}return [XT+(s-SR-LR)*PXH,FY-HH*PXH,0,HH]}
+  function drawH(){const vi=hvS.get(),[x,y,a,h]=hpos(s),K0=0.5*mH*vi*vi;
+    puck.setAttribute('transform',`translate(${x.toFixed(1)},${y.toFixed(1)}) rotate(${(a/DEG).toFixed(1)})`);
+    if(Math.abs(hvv)>0.05){const ux=Math.cos(a),uy=Math.sin(a);hv.set(x,y-40,x+ux*hvv*22,y-40+uy*hvv*22)}else hv.hide();
+    const hm=vi*vi/(2*g10);
+    if(hm<HH){const yy=FY-hm*PXH,xx=XR+hm/Math.tan(ang)*PXH;reachL.setAttribute('x1',xx-70);reachL.setAttribute('x2',xx+70);reachL.setAttribute('y1',yy);reachL.setAttribute('y2',yy);reachL.style.display='';reachT.setAttribute('x',xx+80);reachT.setAttribute('y',yy+8);reachT.textContent='turns back at '+fx(hm,2)+' m'}
+    else{reachL.style.display='none';reachT.textContent=''}
+    bH.setScale(K0);bH.set({K:0.5*mH*hvv*hvv,U:mH*g10*h});
+    eH.setAll({v2:fx(vi*vi,1)+' m²/s²',res:hm<HH?'not enough, it stops at '+fx(hm,2)+' m':'enough, it reaches the top'});
+    pb.liveSet('v',vfmt(hvv));pb.liveSet('h',mfmt(h))}
+  function resetH(){running=false;pb.set(false);s=0;hvv=hvS.get();hDone=false;drawH()}
+  function stepH(dt){let rem=dt;while(rem>1e-9){const d=Math.min(rem,0.002);rem-=d;const onR=s>=SR&&s<SR+LR;hvv+=(onR?-g10*Math.sin(ang):0)*d;s+=hvv*d;
+      if(s<0||s>SR+LR+2.1){hDone=true;running=false;pb.set(false);break}}
+    const h=hpos(clamp(s,0,99))[3],vi=hvS.get(),v2=vi*vi-2*g10*h;hvv=Math.sign(hvv||1)*Math.sqrt(Math.max(0,v2));drawH()}
+  function setView(k){V=k;mode.set(k);gP.style.display=k==='pend'?'':'none';gH.style.display=k==='hill'?'':'none';
+    for(const z in SIDE)SIDE[z].forEach(e=>e.hidden=z!==k);[...SIDE[k]].reverse().forEach(e=>ctx.side.prepend(e));
+    spd.view(k);
+    if(k==='pend'){pb.liveDef([['a','θ'],['v','<i>v</i>'],['K','<i>K</i>'],['U','<i>U</i><sub>G</sub>']]);resetP();
+      ctx.cap.innerHTML='Bar heights are energies in joules. As the ball swings, '+M('<i>K</i>')+' and '+M('<i>U</i><sub>G</sub>')+' trade back and forth while their sum stays fixed. Drag the speed slider to watch it slower or faster.'}
+    else{pb.liveDef([['v','<i>v</i>'],['h','<i>y</i>']]);resetH();
+      ctx.cap.innerHTML='Bar heights are energies in joules. The puck climbs until its kinetic energy is used up, then slides back down. Drag the speed slider to watch it slower or faster.'}
+    relayout(svg)}
+  setView('pend');
+  return {step(dt){if(!running)return;if(V==='pend')stepP(dt*0.6*spd.rate);else stepH(dt*0.7*spd.rate)},toggle:()=>pb.el.click(),reset:()=>V==='pend'?resetP():resetH(),
+    deactivate(){running=false;pb.set(false)},view:v=>setView(v)};
+}});
+/* ================= 7. Energy diagrams (slides 63-69) ================= */
+const Gs=(x,c,w)=>Math.exp(-(((x-c)/w)**2));
+/* the general curve of slide 66: a shallow well, a hump, a deep well, and walls at both ends */
+const Ugen=x=>2+2.4*Gs(x,4.6,1)-1.2*Gs(x,2.2,0.85)-1.9*Gs(x,7.2,1.05)+6*Math.exp(-x/0.35)+6*Math.exp(-(10-x)/0.35);
+tab({id:'diagram',label:'Energy diagrams',title:'Energy diagrams',
+lede:'An energy diagram shows the potential-energy curve (PE) and the total-energy line (TE). From the axis up to the curve is the potential energy; from the curve up to the TE line is the kinetic energy.',
+questions:[],
+build(ctx){
+  const svg=S('svg',{viewBox:'0 0 1000 560',role:'img','aria-label':'Energy diagram with a potential-energy curve, a total-energy line, and a moving particle'},ctx.stage);
+  const MODES={
+    fall:{xmin:0,xmax:6,ymax:60,xs:1,ys:10,xt:'y |(m)|',E:[10,55,40,1],U:y=>9.8*y,slow:0,track:'height of the ball'},
+    spring:{xmin:-0.6,xmax:0.6,ymax:20,xs:0.2,ys:5,xt:'x |(m)|',E:[1,16,8,0.5],U:x=>50*x*x,slow:0.25,track:'position of the block'},
+    gen:{xmin:0,xmax:10,ymax:7,xs:1,ys:1,xt:'x |(m)|',E:[1,6.5,5,0.1],U:Ugen,slow:0.9,track:'position of the particle'}};
+  const gr=new Graph(svg,{x:120,y:64,w:820,h:300,xmin:0,xmax:10,ymin:0,ymax:7,xstep:1,ystep:1,ytitle:'|Energy (J)|',xtitle:'x |(m)|'});
+  const forb=S('g',{},gr.plot),curve=S('polyline',{class:'trace',style:'stroke:var(--U);stroke-width:4.5'},gr.plot);
+  const te=S('line',{style:'stroke:var(--ink-2);stroke-width:3;stroke-dasharray:12 7'},gr.plot);
+  const uBar=S('rect',{width:16,class:'bar U'},gr.plot),kBar=S('rect',{width:16,class:'bar K'},gr.plot);
+  const tps=S('g',{},gr.over),teT=mathText(gr.over,'|TE|',{size:26,anchor:'end'}),peT=mathText(gr.over,'|PE|',{size:26,anchor:'start',cls:'c-U'});
+  const uT=mathText(gr.over,'U',{size:28,anchor:'start',cls:'c-U'}),kT=mathText(gr.over,'K',{size:28,anchor:'start',cls:'c-K'});
+  const TY=478;S('line',{x1:120,x2:940,y1:TY,y2:TY,class:'axisl'},svg);
+  const trackT=txt(svg,120,TY+38,'','small muted');
+  const dot=S('circle',{r:14,class:'obj2'},svg),va=new Arrow(svg,'c-v',{label:'{v}',off:20});
+  /* side panel */
+  const mode=ctx.modes([{v:'fall',label:'Free fall'},{v:'spring',label:'Mass on a spring'},{v:'gen',label:'General'}],'gen',v=>setView(v));
+  const sA=Sec(ctx.side,'Try it');const nA=note('');
+  const eS=Slider({label:'Total energy <i>E</i>',min:1,max:6.5,step:0.1,value:5,unit:'J',dec:1,onInput:()=>reset()});
+  sA.append(nA,eS.el,hint('You cannot change the PE curve: the system sets it. You choose the TE by how you start the motion.'));
+  const sB=Sec(ctx.side,'Reading an energy diagram');
+  sB.append(H('ol',{class:'steps',html:'<li>From the axis to the PE curve is '+M('<i>U</i>')+'; from the curve to the TE line is '+M('<i>K</i>')+'. As one grows the other shrinks, but '+M('<i>K</i> + <i>U</i>')+' stays the same.</li><li>Where the TE line crosses the PE curve is a <b>turning point</b>: '+M('<i>K</i> = 0')+' and the particle reverses.</li><li>The particle can never be where the PE curve is above the TE line (shaded).</li>'}));
+  const NOTE={fall:'For a ball thrown straight up, the PE curve is the straight line '+M('<i>U</i><sub>G</sub> = <i>mgy</i>')+' (here <i>m</i> = 1.0 kg). It rises until '+M('<i>K</i> = 0')+' at the turning point.',
+    spring:'For a block on a horizontal spring, the PE curve is the parabola '+M('<i>U</i><sub>Sp</sub> = ½<i>kx</i><sup>2</sup>')+'. Stretching the spring farther before release raises the TE line and moves the turning points out.',
+    gen:'Released from rest at the left turning point, the particle speeds up where '+M('<i>U</i>')+' decreases and slows down where it increases. It moves fastest where '+M('<i>U</i>')+' is lowest. Lower the TE below the hump and it is trapped in the left well.'};
+  /* state */
+  let V='gen',P=MODES.gen,running=false,x=0,v=0,landed=false;
+  const pb=PlayBar(ctx,{onToggle:()=>{if(landed)reset();running=!running;pb.set(running)},onReset:()=>reset()});
+  pb.liveDef([['x','<i>x</i>'],['K','<i>K</i>'],['U','<i>U</i>']]);
+  const F=x=>-(P.U(x+1e-4)-P.U(x-1e-4))/2e-4;
+  function crossings(E){const out=[],N=800;let px=P.xmin,pd=E-P.U(px);
+    for(let i=1;i<=N;i++){const xx=P.xmin+(P.xmax-P.xmin)*i/N,d=E-P.U(xx);if(pd*d<0)out.push(px+(xx-px)*pd/(pd-d));px=xx;pd=d}return out}
+  function draw(){const E=eS.get(),pts=[];for(let i=0;i<=400;i++){const xx=P.xmin+(P.xmax-P.xmin)*i/400;pts.push([gr.X(xx),gr.Y(Math.min(P.U(xx),P.ymax*1.05))])}
+    curve.setAttribute('points',polyPts(pts));te.setAttribute('x1',gr.x);te.setAttribute('x2',gr.x+gr.w);te.setAttribute('y1',gr.Y(E));te.setAttribute('y2',gr.Y(E));
+    teT.setAttribute('transform',`translate(${gr.x+gr.w-8},${(gr.Y(E)+30).toFixed(1)})`);
+    const xp=V==='spring'?P.xmax*0.86:P.xmin+(P.xmax-P.xmin)*(V==='fall'?0.85:0.97);peT.setAttribute('transform',`translate(${(gr.X(xp)+(V==='gen'?-60:10)).toFixed(1)},${(gr.Y(Math.min(P.U(xp),P.ymax))+24).toFixed(1)})`);
+    /* shaded where U > E */
+    forb.textContent='';let seg=null;
+    for(let i=0;i<=400;i++){const xx=P.xmin+(P.xmax-P.xmin)*i/400,u=P.U(xx),ab=u>E;
+      if(ab){if(!seg)seg=[[gr.X(xx),gr.Y(E)]];seg.push([gr.X(xx),gr.Y(Math.min(u,P.ymax*1.05))])}
+      if((!ab||i===400)&&seg){seg.push([seg[seg.length-1][0],gr.Y(E)]);S('polygon',{points:polyPts(seg),style:'fill:var(--muted);opacity:.16'},forb);
+        const a=seg[0][0],b=seg[seg.length-1][0];S('rect',{x:a,y:TY-6,width:Math.max(0,b-a),height:12,style:'fill:var(--muted);opacity:.25'},forb);seg=null}}
+    /* turning points: label the two that bound the particle */
+    tps.textContent='';const cr=crossings(E);let lo=null,hi=null;cr.forEach(c=>{if(c<=x+1e-6)lo=c;else if(hi===null)hi=c});
+    cr.forEach(c=>{const X=gr.X(c),Y=gr.Y(E);S('line',{x1:X,x2:X,y1:Y,y2:gr.y+gr.h,class:'dim dash'},tps);S('circle',{cx:X,cy:Y,r:6,style:'fill:var(--ink-2)'},tps);
+      if(c===lo||c===hi){const left=c===lo?X>gr.x+170:X>gr.x+gr.w-170;txt(tps,X+(left?-10:10),Y-14,'turning point','small',left?'end':'start')}});
+    const u=P.U(x),K=Math.max(0,E-u),X=gr.X(x);
+    uBar.setAttribute('x',X-8);uBar.setAttribute('y',gr.Y(Math.min(u,P.ymax)));uBar.setAttribute('height',Math.max(0,gr.Y(0)-gr.Y(Math.min(u,P.ymax))));
+    kBar.setAttribute('x',X-8);kBar.setAttribute('y',gr.Y(E));kBar.setAttribute('height',Math.max(0,gr.Y(u)-gr.Y(E)));
+    uT.setAttribute('transform',`translate(${X+14},${((gr.Y(0)+gr.Y(u))/2+8).toFixed(1)})`);kT.setAttribute('transform',`translate(${X+14},${((gr.Y(u)+gr.Y(E))/2+8).toFixed(1)})`);
+    uT.style.display=u>P.ymax*0.08?'':'none';kT.style.display=K>P.ymax*0.08?'':'none';
+    dot.setAttribute('cx',X.toFixed(1));dot.setAttribute('cy',TY-14);
+    if(Math.abs(v)>0.03)va.set(X,TY-46,X+v*(V==='gen'?26:V==='spring'?60:9),TY-46);else va.hide();
+    pb.liveSet('x',mfmt(x));pb.liveSet('K',Jz(K));pb.liveSet('U',Jz(u))}
+  function reset(){running=false;pb.set(false);landed=false;const E=eS.get();
+    if(V==='fall'){x=0;v=Math.sqrt(2*E)}else{const cr=crossings(E);x=V==='spring'?-Math.sqrt(E/50):(cr.length?cr[0]+1e-4:2.2);v=0}
+    draw()}
+  function setView(k){V=k;P=MODES[k];mode.set(k);
+    gr.range({xmin:P.xmin,xmax:P.xmax,ymax:P.ymax,xstep:P.xs,ystep:P.ys,xtitle:P.xt,xfmt:k==='spring'?(v=>fx(v,1)):tk});
+    eS.range(P.E[0],P.E[1]);eS.inp.step=P.E[3];eS.set(P.E[2]);nA.innerHTML=NOTE[k];trackT.textContent=P.track;
+    ctx.cap.innerHTML='The gold bar is '+M('<i>U</i>')+' and the teal bar is '+M('<i>K</i>')+' at the particle’s position. Shaded parts of the diagram, and of the line below it, are where the particle can never be.';
+    reset();relayout(svg)}
+  setView('gen');
+  return {step(dt){if(!running)return;const E=eS.get(),h=0.001;let rem=dt*(P.slow||1);
+      while(rem>1e-9){const d=Math.min(rem,h);rem-=d;v+=F(x)*d;x+=v*d;
+        if(V==='fall'&&x<=0&&v<0){x=0;v=-Math.sqrt(2*E);landed=true;running=false;pb.set(false);break}}
+      /* keep the motion on its TE line */
+      const K=E-P.U(x);if(K>0.002*P.ymax)v=Math.sign(v||1)*Math.sqrt(2*K);draw()},
+    toggle:()=>pb.el.click(),reset,deactivate(){running=false;pb.set(false)},view:v=>setView(v)};
+}});
+/* ================= 8. Equilibrium (slides 67-74) ================= */
+const Ueq=x=>2.5-1.5*Gs(x,2.6,1.05)+1.5*Gs(x,5.6,1.05)+5*Math.exp(-x/0.4);
+tab({id:'equil',label:'Equilibrium',title:'Equilibrium positions',
+lede:'A particle at rest at a <b>minimum</b> of the PE curve is in stable equilibrium: a small push makes it oscillate. At a <b>maximum</b> the equilibrium is unstable: a small push sends it away.',
+questions:['QC10.12'],
+build(ctx){
+  const svg=S('svg',{viewBox:'0 0 1000 560',role:'img','aria-label':'A ball resting at the bottom of a potential-energy well or on top of a hump'},ctx.stage);
+  /* ---------- stable and unstable ---------- */
+  const gA=S('g',{},svg);
+  const gr=new Graph(gA,{x:110,y:70,w:830,h:330,xmin:0,xmax:9,ymin:0,ymax:5,xstep:1,ystep:1,ytitle:'|Energy (J)|',xtitle:'x |(m)|'});
+  const pts=[];for(let i=0;i<=360;i++){const x=9*i/360;pts.push([gr.X(x),gr.Y(Math.min(Ueq(x),5.2))])}
+  S('polygon',{points:polyPts([[gr.X(0),gr.Y(0)],...pts,[gr.X(9),gr.Y(0)]]),style:'fill:var(--U);opacity:.12'},gr.plot);
+  S('polyline',{points:polyPts(pts),class:'trace',style:'stroke:var(--U);stroke-width:4.5'},gr.plot);
+  const te=S('line',{style:'stroke:var(--ink-2);stroke-width:3;stroke-dasharray:12 7'},gr.plot),teT=txt(gr.over,0,0,'TE','strong','end');
+  const XS=2.6,XU=5.6;
+  [[XS,'stable equilibrium','minimum'],[XU,'unstable equilibrium','maximum']].forEach(([x0,a])=>{const X=gr.X(x0);S('line',{x1:X,x2:X,y1:gr.Y(Ueq(x0)),y2:gr.y+gr.h,class:'dim dash'},gr.plot);
+    txt(gr.over,X,x0===XS?gr.Y(Ueq(x0))+42:gr.Y(Ueq(x0))-30,a,'small','middle')});
+  const ball=S('circle',{r:16,class:'obj2'},gr.over),va=new Arrow(gr.over,'c-v',{label:'{v}',off:20});
+  /* ---------- Example 10.8: block on a vertical spring ---------- */
+  const gB=S('g',{},svg),hid=hatchPat(svg),BX=150,BY=500,PY=500,L0=0.6;
+  ground(gB,60,260,BY,hid);
+  const spr=S('path',{class:'spring',style:'stroke-width:3.2'},gB),blk=S('rect',{x:BX-58,width:116,height:52,rx:5,class:'obj'},gB),blkT=txt(gB,BX,0,'','small strong','middle');
+  /* the level lines stop at the block's edges, so they never cross its label */
+  const DL='stroke-width:2.5;stroke-dasharray:8 6',l0A=S('line',{class:'dim dash'},gB),l0B=S('line',{class:'dim dash'},gB),eqA=S('line',{style:'stroke:var(--accent);'+DL},gB),eqB=S('line',{style:'stroke:var(--accent);'+DL},gB);
+  const l0T=mt(gB,[['L','i'],['0','s']],BX+76,0,26,{fill:'var(--ink-2)'}),eqT=mt(gB,[['y','i'],['eq','s']],BX+76,0,26,{colors:[[0,'--accent'],[1,'--accent']]});
+  const gr2=new Graph(gB,{x:410,y:96,w:550,h:314,xmin:0,xmax:0.7,ymin:0,ymax:12,xstep:0.1,ystep:2,ytitle:'|Energy (J)|',xtitle:'y |(m)|',xfmt:v=>fx(v,1)});
+  const eqV=S('line',{style:'stroke:var(--accent);stroke-width:2.5;stroke-dasharray:8 6'},gr2.plot),l0V=S('line',{class:'dim dash',style:'stroke-width:2.5'},gr2.plot);
+  const cG=S('polyline',{class:'trace',style:'stroke:var(--U);stroke-width:4'},gr2.plot),cS=S('polyline',{class:'trace',style:'stroke:var(--USp);stroke-width:4'},gr2.plot);
+  const cT=S('polyline',{class:'trace',style:'stroke:var(--ink);stroke-width:5.5'},gr2.plot);
+  const mk=S('circle',{r:9,class:'marker c-ink'},gr2.over);
+  /* a legend above the graph names the curves, so no label has to sit on a curve */
+  [[560,'--U',4,[['U','i'],['G','s']],'--U'],[700,'--USp',4,[['U','i'],['Sp','s']],'--USp'],[840,'--ink',5.5,[['U','i'],['tot','s']],null]].forEach(([x,c,w,parts,col])=>{
+    S('line',{x1:x,x2:x+32,y1:52,y2:52,style:`stroke:var(${c});stroke-width:${w};stroke-linecap:round`},gB);
+    mt(gB,parts,x+42,61,26,col?{colors:[[0,col],[1,col]]}:{weight:700})});
+  const yEqL=mt(gr2.over,[['y','i'],['eq','s']],0,0,26,{anchor:'end',colors:[[0,'--accent'],[1,'--accent']]}),l0L=mt(gr2.over,[['L','i'],['0','s']],0,0,26,{fill:'var(--ink-2)'});
+
+  /* ---------- side panel ---------- */
+  const mode=ctx.modes([{v:'su',label:'Stable and unstable'},{v:'spring',label:'Mass on a spring (Example 10.8)'}],'su',v=>setView(v));
+  const aA=Sec(ctx.side,'Try it');
+  const where=Chips([{v:'s',label:'At the minimum'},{v:'u',label:'At the maximum'}],k=>{at=k;reset()});
+  const push=H('button',{type:'button',class:'btn primary',text:'Give it a small push'});push.addEventListener('click',()=>{if(moved)reset();v=0.55;running=true;moved=true;pb.set(true)});
+  aA.append(where.el,H('div',{style:'margin-top:10px'},push),hint('The push adds a small amount of kinetic energy, 0.15 J, raising the TE line just above the equilibrium point.'));
+  const aB=Sec(ctx.side,'What happens');const nB=note('');aB.append(nB,keyIdea('minima of the PE curve are stable equilibria and maxima are unstable. At both, the slope is zero, so the force is zero.'));
+  const bA=Sec(ctx.side,'Try it');
+  const mS=Slider({label:'Block mass <i>m</i>',min:0.5,max:4,step:0.25,value:2,unit:'kg',dec:2,onInput:()=>drawB()});
+  const kS=Slider({label:'Spring constant <i>k</i>',min:100,max:400,step:10,value:200,unit:'N/m',onInput:()=>drawB()});
+  bA.append(note('A block sits on a spring of length '+M('<i>L</i><sub>0</sub> = 0.60 m')+' standing on the floor. The block + earth + spring system has both '+M('<i>U</i><sub>G</sub>')+' and '+M('<i>U</i><sub>Sp</sub>')+'.'),mS.el,kS.el);
+  const bB=Sec(ctx.side,'Find the equilibrium');
+  Eq(bB,'<i>U</i><sub>tot</sub> = <i>mgy</i> + ½<i>k</i>(<i>y</i> − <i>L</i><sub>0</sub>)<sup>2</sup>','small');
+  Eq(bB,'d<i>U</i><sub>tot</sub>/d<i>y</i> = <i>mg</i> + <i>k</i>(<i>y</i> − <i>L</i><sub>0</sub>) = 0','small');
+  const eB=Eq(bB,'<i>y</i><sub>eq</sub> = <i>L</i><sub>0</sub> − <i>mg</i>/<i>k</i> = {y}');
+  bB.append(keyIdea('the equilibrium is the minimum of the total PE curve. The spring is compressed by '+M('<i>mg</i>/<i>k</i>')+', just enough for its force to balance the weight.'));
+  const SIDE={su:[aA,aB],spring:[bA,bB]};
+  /* ---------- state ---------- */
+  let V='su',running=false,at='s',x=XS,v=0,moved=false;
+  const pb=PlayBar(ctx,{onToggle:()=>{if(V!=='su')return;if(!moved){v=0.55;moved=true}running=!running;pb.set(running)},onReset:()=>reset()});
+  pb.liveDef([['x','<i>x</i>'],['v','<i>v</i>']]);
+  const E=()=>Ueq(at==='s'?XS:XU)+(moved?0.15:0);
+  function drawA(){const X=gr.X(x),Y=gr.Y(Ueq(x)),dU=(Ueq(x+1e-3)-Ueq(x-1e-3))/2e-3;
+    /* sit the ball on the curve: offset along the curve's normal, in screen units */
+    const nx=dU*(gr.h/5)/(gr.w/9),ny=-1,nl=Math.hypot(nx,ny);ball.setAttribute('cx',(X+nx/nl*17).toFixed(1));ball.setAttribute('cy',(Y+ny/nl*17).toFixed(1));
+    if(Math.abs(v)>0.03)va.set(X,Y-54,X+v*60,Y-54);else va.hide();
+    const e=E();te.setAttribute('x1',gr.x);te.setAttribute('x2',gr.x+gr.w);te.setAttribute('y1',gr.Y(e));te.setAttribute('y2',gr.Y(e));te.style.display=moved?'':'none';
+    teT.setAttribute('x',gr.x+gr.w-6);teT.setAttribute('y',gr.Y(e)-12);teT.style.display=moved?'':'none';
+    nB.innerHTML=!moved?(at==='s'?'At rest at the bottom of the well, the ball stays put: the slope of '+M('<i>U</i>')+' is zero, so there is no force.':'Balanced on top of the hump, the ball can stay at rest too: the slope of '+M('<i>U</i>')+' is zero here as well. Now give it a push.'):
+      (at==='s'?'The TE line is just above the minimum, so the turning points are close on both sides. The ball oscillates near the equilibrium: <b>stable</b>.':'With slightly more energy than the top of the hump, every nearby point is allowed and '+M('<i>U</i>')+' falls away on both sides. The ball speeds up as it leaves: <b>unstable</b>.');
+    pb.liveSet('x',mfmt(x));pb.liveSet('v',vfmt(v))}
+  function reset(){running=false;pb.set(false);moved=false;x=at==='s'?XS:XU;v=0;where.mark(at);drawA()}
+  function drawB(){const m=mS.get(),k=kS.get(),yeq=L0-m*g10/k,top=y=>BY-y*PY;
+    const yb=top(yeq),bTop=yb-52;
+    spr.setAttribute('d',springV(BX,BY,yb,9,24));blk.setAttribute('y',bTop.toFixed(1));blkT.setAttribute('y',(yb-20).toFixed(1));blkT.textContent=fx(m,2)+' kg';
+    const seg=(a,b,y,full)=>{if(full){a.setAttribute('x1',BX-84);a.setAttribute('x2',BX+84);b.style.display='none'}else{a.setAttribute('x1',BX-84);a.setAttribute('x2',BX-61);b.setAttribute('x1',BX+61);b.setAttribute('x2',BX+84);b.style.display=''}
+      [a,b].forEach(l=>{l.setAttribute('y1',y);l.setAttribute('y2',y)})};
+    const yL=top(L0);seg(l0A,l0B,yL,!(yL>bTop-2&&yL<yb+2));seg(eqA,eqB,yb,false);
+    l0T.pos(BX+92,yL-8);eqT.pos(BX+92,yb+28);   /* L0 above its line, y_eq below its line: they can never meet */
+    const ymax=niceMax(m*g10*0.7*1.15);gr2.range({ymax,ystep:niceStep(ymax,5)});
+    const PG=[],PS=[],PT=[];
+    for(let i=0;i<=140;i++){const y=0.7*i/140,uG=m*g10*y,uS=0.5*k*(y-L0)**2;PG.push([gr2.X(y),gr2.Y(uG)]);PS.push([gr2.X(y),gr2.Y(Math.min(uS,ymax*1.1))]);PT.push([gr2.X(y),gr2.Y(Math.min(uG+uS,ymax*1.1))])}
+    cG.setAttribute('points',polyPts(PG));cS.setAttribute('points',polyPts(PS));cT.setAttribute('points',polyPts(PT));
+    const ue=m*g10*yeq+0.5*k*(yeq-L0)**2,Xe=gr2.X(yeq),XL=gr2.X(L0);mk.setAttribute('cx',Xe);mk.setAttribute('cy',gr2.Y(ue));
+    eqV.setAttribute('x1',Xe);eqV.setAttribute('x2',Xe);eqV.setAttribute('y1',gr2.y);eqV.setAttribute('y2',gr2.y+gr2.h);
+    l0V.setAttribute('x1',XL);l0V.setAttribute('x2',XL);l0V.setAttribute('y1',gr2.y);l0V.setAttribute('y2',gr2.y+gr2.h);
+    /* place each equilibrium label at the highest spot beside its line where no curve passes (curves sampled finely) */
+    const obs=[];for(let i=0;i<=700;i++){const y=0.7*i/700,uG=m*g10*y,uS=0.5*k*(y-L0)**2;[uG,uS,uG+uS].forEach(u=>{if(u<=ymax*1.02)obs.push([gr2.X(y),gr2.Y(u)])})}
+    obs.push([Xe,gr2.Y(ue)]);
+    const freeY=(x0,x1)=>{for(let yy=gr2.y+30;yy<=gr2.y+gr2.h-8;yy+=6){if(!obs.some(([px,py])=>px>=x0-6&&px<=x1+6&&py>=yy-28&&py<=yy+10))return yy}return gr2.y+30};
+    yEqL.pos(Xe-10,freeY(Xe-10-58,Xe-10));l0L.pos(XL+10,freeY(XL+10,XL+10+40));
+    eB.set('y',fx(yeq,3)+NB+'m');}
+
+  function setView(k){V=k;mode.set(k);gA.style.display=k==='su'?'':'none';gB.style.display=k==='spring'?'':'none';
+    for(const z in SIDE)SIDE[z].forEach(e=>e.hidden=z!==k);[...SIDE[k]].reverse().forEach(e=>ctx.side.prepend(e));
+    [...ctx.bar.children].forEach(c=>c.hidden=k!=='su');
+    if(k==='su'){reset();ctx.cap.innerHTML='The ball sits on the PE curve like a ball on a hilly track. The dashed TE line appears once you push it.'}
+    else{drawB();ctx.cap.innerHTML='The black curve is the total potential energy. Its minimum is the new equilibrium '+M('<i>y</i><sub>eq</sub>')+', lower than the spring’s own equilibrium length '+M('<i>L</i><sub>0</sub>')+'. The dashed lines mark both.'}
+    relayout(svg)}
+  setView('su');
+  return {step(dt){if(!running||V!=='su')return;let rem=dt*0.8;const e=E();
+      while(rem>1e-9){const d=Math.min(rem,0.001);rem-=d;v+=-(Ueq(x+1e-4)-Ueq(x-1e-4))/2e-4*d;x+=v*d}
+      const K=e-Ueq(x);if(K>0.004)v=Math.sign(v)*Math.sqrt(2*K);
+      if(x>8.8||x<0.15){running=false;pb.set(false)}drawA()},
+    toggle:()=>pb.el.click(),reset,deactivate(){running=false;pb.set(false)},view:v=>setView(v)};
+}});
+/* ================= 9. Force from potential energy (slides 75-84) ================= */
+tab({id:'force',label:'Force from PE',title:'Finding force from potential energy',
+lede:'The force is the negative of the slope of the potential-energy curve: '+M('<i>F<sub>s</sub></i> = −d<i>U</i>/d<i>s</i>')+'. Where the curve slopes down, the force is positive; where it slopes up, the force is negative; where it is flat, the force is zero.',
+questions:['RQ10.5','QC10.10','QC10.11'],
+build(ctx){
+  const svg=S('svg',{viewBox:'0 0 1000 560',role:'img','aria-label':'Potential energy graph above the matching force graph'},ctx.stage);
+  const MODES={
+    spring:{xmin:-2,xmax:2,xs:0.5,uy:[0,8,2],fy:[-8,8,4],U:x=>2*x*x,F:x=>-4*x,E:4.5,x0:-1.5,v0:0,xf:v=>fx(v,1),
+      note:'A block on a horizontal spring with '+M('<i>k</i> = 4.0 N/m')+': '+M('<i>U</i> = ½<i>kx</i><sup>2</sup>')+', so '+M('<i>F<sub>x</sub></i> = −<i>kx</i>')+'. The force always points back toward equilibrium.'},
+    qc:{xmin:0,xmax:7,xs:1,uy:[0,5,1],fy:[-4,4,2],U:x=>x<1?1+2*x:x<2?3-3*(x-1):x-2,F:x=>x<1?-2:x<2?3:-1,E:4,x0:1,v0:Math.sqrt(2),xf:tk,
+      note:'The curve from QuickChecks 10.10 and 10.11. Press Play: a 1.0 kg particle at '+M('<i>x</i> = 1.0 m')+' has 1.0 J of kinetic energy and moves right, so its TE is 4.0 J.'}};
+  const gU=new Graph(svg,{x:120,y:46,w:820,h:196,xmin:-2,xmax:2,ymin:0,ymax:8,xstep:0.5,ystep:2,ytitle:'U |(J)|',noXLabels:true});
+  const gF=new Graph(svg,{x:120,y:318,w:820,h:170,xmin:-2,xmax:2,ymin:-8,ymax:8,xstep:0.5,ystep:4,ytitle:'F_x |(N)|',xtitle:'x |(m)|'});
+  const uC=S('polyline',{class:'trace',style:'stroke:var(--U);stroke-width:4.5'},gU.plot),fC=S('polyline',{class:'trace',style:'stroke:var(--force);stroke-width:4.5'},gF.plot);
+  const teL=S('line',{style:'stroke:var(--ink-2);stroke-width:2.5;stroke-dasharray:12 7'},gU.plot),tpL=S('line',{class:'dim dash'},gU.plot),tpT=txt(gU.over,0,0,'turning point','small','start');
+  const tan=S('line',{style:'stroke:var(--ink);stroke-width:2.5'},gU.plot);
+  /* the dashed link between the graphs runs inside each plot only, skipping the gap where the force axis title sits */
+  const link=S('line',{x1:0,x2:0,y1:gU.y,y2:gU.y+gU.h,class:'dim dash'},svg),link2=S('line',{x1:0,x2:0,y1:gF.y,y2:gF.y+gF.h,class:'dim dash'},svg);
+  const pU=S('circle',{r:9,class:'marker c-U'},gU.over),pF=S('circle',{r:9,class:'marker c-F'},gF.over);
+  /* the F label goes past the arrow tip, unless that would leave the plot; then it sits past the tail */
+  const fA=new Arrow(gU.over,'c-F',{label:'{F}',off:0,w:4.5,lpos:(x1,y1,x2,y2)=>{const d=Math.sign(x2-x1)||1,lx=x2+d*22;return lx<gU.x+16||lx>gU.x+gU.w-10?[x1-d*20,y1]:[lx,y2]}});
+  const fV=mt(gF.over,[''],0,0,24,{weight:700});
+  const hit=S('rect',{x:120,y:40,width:820,height:460,style:'fill:transparent;cursor:ew-resize'},svg);
+  /* side panel */
+  const mode=ctx.modes([{v:'spring',label:'Spring'},{v:'qc',label:'QuickCheck 10.10 curve'}],'qc',v=>setView(v));
+  const sA=Sec(ctx.side,'Try it');const nA=note('');sA.append(nA,hint('Drag across either graph to move the point.'));
+  const sB=Sec(ctx.side,'At the point');
+  const e1=Eq(sB,'slope = d<i>U</i>/d<i>x</i> = {s}','small'),e2=Eq(sB,'<i class="qF">F</i><sub><i>x</i></sub> = −d<i>U</i>/d<i>x</i> = {F}');
+  const nB=note('');sB.append(nB,keyIdea('the force points toward lower potential energy, “downhill” on the PE curve, and is zero where the curve is flat.'));
+  /* state */
+  let V='qc',P=MODES.qc,running=false,x=1,v=0,played=false;
+  const pb=PlayBar(ctx,{onToggle:()=>{if(!played||ended)start();running=!running;pb.set(running)},onReset:()=>{running=false;pb.set(false);played=false;ended=false;x=P.x0;v=0;draw()}});
+  const spd=SpeedSlider(ctx,pb);   /* slower, normal, or faster playback; each view keeps its own setting */
+  let ended=false;
+  pb.liveDef([['x','<i>x</i>'],['F','<i>F<sub>x</sub></i>'],['K','<i>K</i>']]);
+  function start(){played=true;ended=false;x=P.x0;v=P.v0||(V==='spring'?0:Math.sqrt(2*(P.E-P.U(P.x0))));if(V==='spring'){x=P.x0;v=0}}
+  function draw(){const u=P.U(x),f=P.F(x),s=-f,X=gU.X(x);
+    const UP=[],FP=[];for(let i=0;i<=420;i++){const xx=P.xmin+(P.xmax-P.xmin)*i/420;UP.push([gU.X(xx),gU.Y(P.U(xx))]);FP.push([gF.X(xx),gF.Y(P.F(xx))])}
+    uC.setAttribute('points',polyPts(UP));fC.setAttribute('points',polyPts(FP));
+    const show=played||V==='qc';const E=P.E;
+    teL.style.display=tpL.style.display=tpT.style.display=played?'':'none';
+    if(played){teL.setAttribute('x1',gU.x);teL.setAttribute('x2',gU.x+gU.w);teL.setAttribute('y1',gU.Y(E));teL.setAttribute('y2',gU.Y(E));
+      const xt=V==='qc'?6:Math.sqrt(E/2);tpL.setAttribute('x1',gU.X(xt));tpL.setAttribute('x2',gU.X(xt));tpL.setAttribute('y1',gU.Y(E));tpL.setAttribute('y2',gU.y+gU.h);
+      tpT.setAttribute('x',gU.X(xt)+10);   /* right of the turning point: the particle never goes there */tpT.setAttribute('y',gU.Y(E)+30)}
+    const dx=(P.xmax-P.xmin)*0.09;tan.setAttribute('x1',gU.X(x-dx));tan.setAttribute('x2',gU.X(x+dx));tan.setAttribute('y1',gU.Y(u-s*dx));tan.setAttribute('y2',gU.Y(u+s*dx));
+    [link,link2].forEach(l=>{l.setAttribute('x1',X);l.setAttribute('x2',X)});
+    pU.setAttribute('cx',X);pU.setAttribute('cy',gU.Y(u));pF.setAttribute('cx',X);pF.setAttribute('cy',gF.Y(f));
+    {const len=f*(V==='qc'?26:12),ay=gU.Y(u)-34<gU.y+14?gU.Y(u)+34:gU.Y(u)-34;   /* keep the force arrow inside the plot: near the left edge it ends at the particle instead of starting there */
+      if(Math.abs(f)<=0.05)fA.hide();else if(X+len<gU.x+6)fA.set(X-len+8,ay,X+8,ay);else fA.set(X,ay,X+len,ay)}
+    fV.set(0,fx(f,1)+NB+'N');fV.el.setAttribute('text-anchor',X>gF.x+gF.w-130?'end':'start');{let up=f>=0;const Y=gF.Y(f);if(up&&Y-14<gF.y+22)up=false;else if(!up&&Y+30>gF.y+gF.h-4)up=true;fV.pos(X>gF.x+gF.w-130?X-16:X+16,Y+(up?-14:30))}
+    e1.set('s',fx(s,2)+NB+'J/m');e2.set('F',fx(f,2)+NB+'N');
+    nB.innerHTML=Math.abs(s)<1e-6?'The curve is flat here, so there is no force: this is an equilibrium point.':
+      s<0?'The curve slopes <b>down</b>, so the force is <b>positive</b>: it points right, toward lower '+M('<i>U</i>')+'.':'The curve slopes <b>up</b>, so the force is <b>negative</b>: it points left, toward lower '+M('<i>U</i>')+'.';
+    pb.liveSet('x',mfmt(x));pb.liveSet('F',fx(f,2)+NB+'N');pb.liveSet('K',played?Jz(Math.max(0,P.E-u)):'—')}
+  draggable(hit,svg,{move:p=>{if(running)return;played=false;x=clamp(gU.iX(p.x),P.xmin,P.xmax);v=0;draw()}});
+  function setView(k){V=k;P=MODES[k];mode.set(k);spd.view(k);running=false;pb.set(false);played=false;ended=false;
+    gU.range({xmin:P.xmin,xmax:P.xmax,ymin:P.uy[0],ymax:P.uy[1],xstep:P.xs,ystep:P.uy[2]});
+    gF.range({xmin:P.xmin,xmax:P.xmax,ymin:P.fy[0],ymax:P.fy[1],xstep:P.xs,ystep:P.fy[2],xfmt:P.xf});
+    nA.innerHTML=P.note;x=k==='qc'?1.5:-1;v=0;draw();
+    ctx.cap.innerHTML='The two graphs share the same <i>x</i>-axis. The black line is the tangent to the PE curve; the force graph below is the negative of its slope. Drag the speed slider to watch the motion slower or faster.';relayout(svg)}
+  setView('qc');
+  return {step(dt){if(!running)return;let rem=dt*(V==='spring'?0.6:0.8)*spd.rate;
+      while(rem>1e-9){const d=Math.min(rem,0.001);rem-=d;v+=P.F(x)*d;x+=v*d;
+        if(V==='qc'&&x<=P.x0&&v<0){x=P.x0;ended=true;running=false;pb.set(false);break}}   /* back at x = 1.0 m with its 1.0 J of kinetic energy */
+      const K=P.E-P.U(x);if(K>0.01)v=Math.sign(v||1)*Math.sqrt(2*K);draw()},
+    toggle:()=>pb.el.click(),reset(){running=false;pb.set(false);played=false;x=P.x0;draw()},deactivate(){running=false;pb.set(false)},view:v=>setView(v)};
+}});
+/* ================= 10. Conservative and nonconservative forces (slides 85-86) ================= */
+tab({id:'cons',label:'Conservative forces',title:'Conservative and nonconservative forces',
+lede:'The work done by a <b>conservative</b> force, such as gravity or a spring, is the same for every path between two points, so it has a potential energy: '+M('Δ<i>U</i> = −<i>W</i><sub>c</sub>')+'. Friction’s work depends on the path, so there is no “friction potential energy.”',
+questions:[],
+build(ctx){
+  const svg=S('svg',{viewBox:'0 0 1000 560',role:'img','aria-label':'A bead moved from point A to point B along different paths'},ctx.stage);
+  const PXM=74,OX=110,OY=470,mB=0.5,fK=2,W=(x,y)=>[OX+x*PXM,OY-y*PXM];
+  const PATHS={1:[[0,0],[7,3]],2:[[0,0],[0,3],[7,3]],3:[[0,0],[3.5,0],[3.5,5],[7,5],[7,3]]};
+  const NAME={1:'Path 1',2:'Path 2',3:'Path 3',trip:'Round trip'};
+  const COL={1:'var(--p1)',2:'var(--p2)',3:'var(--p3)',trip:'var(--p4)'};   /* one color per path, used for its line, label, and every number about it */
+  const dot=k=>`<span class="pdot" style="color:${COL[k]}">●</span>`;
+  S('line',{x1:60,x2:700,y1:OY,y2:OY,class:'gridl strong'},svg);
+  const lines={};
+  [1,2,3].forEach(k=>{lines[k]=S('polyline',{points:polyPts(PATHS[k].map(p=>W(...p))),style:`fill:none;stroke:${COL[k]};stroke-width:3.5;stroke-dasharray:10 7;stroke-linejoin:round;opacity:.55`},svg)});
+  const lab=(k,x,y)=>{const t=txt(svg,...W(x,y),NAME[k],'small strong');t.style.fill=COL[k];return t};
+  /* label spots no bead or force arrow passes through, on any of the four routes */
+  lab(1,1.0,1.30);lab(2,0.15,3.45);lab(3,3.62,5.45);
+  /* the traveled part, in the path's color; a round trip shows its way out and its way back in their own colors */
+  const doneA=S('polyline',{style:'fill:none;stroke-width:7;stroke-linejoin:round;stroke-linecap:round'},svg),doneB=S('polyline',{style:'fill:none;stroke-width:7;stroke-linejoin:round;stroke-linecap:round'},svg);
+  [['A',0,0],['B',7,3]].forEach(([n,x,y])=>{const [X,Y]=W(x,y);S('circle',{cx:X,cy:Y,r:8,style:'fill:var(--ink)'},svg);txt(svg,X+(n==='A'?-16:44),Y+(n==='A'?-22:-26),n,'big',n==='A'?'end':'start')});
+  const bead=S('circle',{r:15,class:'obj2'},svg),fA=new Arrow(svg,'c-F',{label:'{f}_k',off:22,w:4}),gA=new Arrow(svg,'c-F',{label:'{F}_G',off:22,w:4});
+  const panel=S('g',{},svg);txt(panel,980,76,'Work done so far','strong','end');const pName=txt(panel,980,248,'','small strong','end');
+  const wG=mt(panel,['by gravity: ',''],980,120,26,{anchor:'end'}),wF=mt(panel,['by friction: ',''],980,162,26,{anchor:'end'}),dS=mt(panel,['distance: ',''],980,204,26,{anchor:'end'});
+  wG.sp[1].style.fontWeight=wF.sp[1].style.fontWeight=700;
+  /* side panel */
+  const sA=Sec(ctx.side,'Choose a path from A to B');
+  const pick=Chips([{v:'1',label:dot(1)+'Path 1'},{v:'2',label:dot(2)+'Path 2'},{v:'3',label:dot(3)+'Path 3'},{v:'trip',label:dot('trip')+'Round trip: out on 1, back on 2'}],k=>{cur=k;reset();running=true;pb.set(true)});
+  sA.append(pick.el,hint('A 0.50 kg bead is pushed along a rough wire. Friction is 2.0 N, always opposite the motion. B is 3.0 m higher than A.'));
+  const sB=Sec(ctx.side,'Results');
+  const tb=H('table',{class:'tbl'});sB.append(tb);
+  const rows={};tb.innerHTML='<tr><th>Path</th><th class="r">Length</th><th class="r">'+M('<i>W</i><sub>G</sub>')+'</th><th class="r">'+M('<i>W</i><sub>f</sub>')+'</th></tr>';
+  ['1','2','3','trip'].forEach(k=>{const tr=H('tr',{class:'pc'});tr.style.color=COL[k];tr.innerHTML=`<td>${dot(k)}${NAME[k]}</td><td class="r">—</td><td class="r">—</td><td class="r">—</td>`;tb.append(tr);rows[k]=tr});
+  sB.append(hint('Lengths in meters, work in joules.'));
+  sB.append(note('Gravity does the same work on every path from A to B, and zero work on the round trip: it is conservative. Friction always does negative work, more for a longer path: it is nonconservative.'),
+    keyIdea('only conservative forces have a potential energy. Friction turns mechanical energy into thermal energy instead.'));
+  /* state */
+  let cur='1',running=false,d=0;
+  const pts=k=>k==='trip'?PATHS[1].concat(PATHS[2].slice().reverse().slice(1)):PATHS[k];
+  let tr=null,L=0;
+  const pb=PlayBar(ctx,{onToggle:()=>{if(d>=L-1e-9)reset();running=!running;pb.set(running)},onReset:()=>reset()});
+  const spd=SpeedSlider(ctx,pb);spd.view('main');   /* slower, normal, or faster playback */
+  pb.liveDef([['d','distance'],['g','<i>W</i><sub>G</sub>'],['f','<i>W</i><sub>f</sub>']]);
+  function draw(){const [xm,ym,a]=tr.at(d),[X,Y]=W(xm,ym),wg=-mB*g10*ym,wf=-fK*d;
+    bead.setAttribute('cx',X.toFixed(1));bead.setAttribute('cy',Y.toFixed(1));
+    const ux=Math.cos(a),uy=-Math.sin(a);if(d>0&&d<L)fA.set(X-ux*18,Y-uy*18,X-ux*70,Y-uy*70);else fA.hide();gA.set(X+24,Y,X+24,Y+60);
+    const P=[];const all=pts(cur);let acc=0;P.push(W(...all[0]));
+    for(let i=1;i<all.length;i++){const sl=Math.hypot(all[i][0]-all[i-1][0],all[i][1]-all[i-1][1]);if(acc+sl<=d){P.push(W(...all[i]));acc+=sl}else{const t=(d-acc)/sl;P.push(W(lerp(all[i-1][0],all[i][0],t),lerp(all[i-1][1],all[i][1],t)));break}}
+    /* split the traveled line where a round trip turns back at B */
+    const L1=Math.hypot(7,3);if(cur==='trip'&&d>L1){let a=0,k=0;const all2=pts(cur);for(let i=1;i<all2.length;i++){a+=Math.hypot(all2[i][0]-all2[i-1][0],all2[i][1]-all2[i-1][1]);if(Math.abs(a-L1)<1e-6){k=i;break}}
+      doneA.setAttribute('points',polyPts(P.slice(0,k+1)));doneB.setAttribute('points',polyPts(P.slice(k)));doneB.style.display=''}
+    else{doneA.setAttribute('points',polyPts(P));doneB.style.display='none'}
+    doneA.style.stroke=cur==='trip'?COL[1]:COL[cur];doneB.style.stroke=COL[2];
+    [wG,wF,dS].forEach(m=>m.sp[1].style.fill=COL[cur]);pName.textContent=NAME[cur];pName.style.fill=COL[cur];
+    pb.liveEl.querySelectorAll('.n').forEach(n=>n.style.color=COL[cur]);
+    wG.set(1,Jz(wg));wF.set(1,Jz(wf));dS.set(1,fx(d,1)+NB+'m');
+    pb.liveSet('d',fx(d,1)+NB+'m');pb.liveSet('g',Jz(wg));pb.liveSet('f',Jz(wf));
+    if(d>=L-1e-9){const c=rows[cur].children;c[1].textContent=fx(L,1);c[2].textContent=fx(Math.abs(wg)<5e-3?0:wg,1);c[3].textContent=fx(wf,1)}}
+  function reset(){running=false;pb.set(false);const all=pts(cur);tr=arcTrack(all);L=tr.L;d=0;pick.mark(cur);
+    [1,2,3].forEach(k=>lines[k].style.opacity=(cur===String(k)||cur==='trip'&&k<3)?'1':'.45');draw()}
+  reset();
+  ctx.cap.innerHTML='Each path has its own color, used for its line, its label, and its numbers. The thick line is the part traveled so far, and the table keeps each result so you can compare paths. Drag the speed slider to watch it slower or faster.';
+  return {step(dt){if(!running)return;d=Math.min(L,d+dt*2.2*spd.rate);if(d>=L){running=false;pb.set(false)}draw()},toggle:()=>pb.el.click(),reset,deactivate(){running=false;pb.set(false)}};
+}});
+/* ================= 11. The energy principle revisited (slides 87-92) ================= */
+tab({id:'principle',label:'Energy principle',title:'The energy principle revisited',
+lede:'Energy is transformed inside the system and transferred in or out by external work: '+M('Δ<i>K</i> + Δ<i>U</i> + Δ<i>E</i><sub>th</sub> = <i>W</i><sub>ext</sub>')+'. An isolated system has '+M('<i>W</i><sub>ext</sub> = 0')+', so its total energy is conserved.',
+questions:['QC10.13'],
+build(ctx){
+  const svg=S('svg',{viewBox:'0 0 1000 560',role:'img','aria-label':'A bag hauled up a slope, with an energy bar chart'},ctx.stage);
+  const hid=hatchPat(svg);
+  const BAR=(g,x,y0,up,down,bw,ow)=>new BarEq(g,{x,y0,up,down,bw,ow,labelY:y0+(down||0)+46,lsize:28,fmt:v=>(Math.abs(v)<5e-3?'0':Math.abs(v)>=9.95?fx(v,0):fx(v,1))+NB+'J',
+    items:[{key:'Ki',cls:'K',label:'K_i'},'+',{key:'Ui',cls:'U',label:'U_i'},'+',{key:'W',cls:'W',label:'W_(ext)'},'=',{key:'Kf',cls:'K',label:'K_f'},'+',{key:'Uf',cls:'U',label:'U_f'},'+',{key:'E',cls:'E',label:'ΔE_(th)'}]});
+  /* ---------- hauling up supplies (Example 10.10) ---------- */
+  const gH=S('g',{},svg),OX=60,OY=480,PX=40,Ls=7,LsD=9.5,mB=20,vB=1;   /* the bag travels 7.0 m up a slope drawn 8.0 m long, so it stops just below the top edge */
+  const slope=S('path',{style:'fill:var(--rule-2);stroke:var(--ground);stroke-width:4;stroke-linejoin:round'},gH);ground(gH,30,520,OY,hid);
+  const rope=S('polyline',{style:'fill:none;stroke:#7B5B3A;stroke-width:3;stroke-linejoin:round'},gH);
+  /* stick-figure climber standing on the ledge, leaning back and gripping the rope at chest height; origin at the feet */
+  const fig=S('g',{},gH),LN='fill:none;stroke:var(--ink-2);stroke-width:4.5;stroke-linecap:round;stroke-linejoin:round';
+  S('polyline',{points:'0,-48 -11,-25 -25,0',style:LN},fig);S('polyline',{points:'0,-48 9,-24 15,0',style:LN},fig);   /* legs: front one braced toward the slope */
+  S('line',{x1:0,y1:-48,x2:16,y2:-91,style:LN},fig);   /* torso leaning back */
+  const arm1=S('polyline',{style:LN},fig),arm2=S('polyline',{style:LN},fig);   /* arms, posed each frame so the hands hold the rope */
+  S('circle',{cx:21,cy:-105,r:11.5,style:'fill:var(--surface);stroke:var(--ink-2);stroke-width:4'},fig);   /* head */
+  S('line',{x1:-27,x2:19,y1:0,y2:0,style:'stroke:var(--ink-2);stroke-width:3;stroke-linecap:round;opacity:.5'},fig);   /* footing */
+  const climbT=txt(gH,0,0,'climber','small muted','end');
+  const bag=S('g',{},gH);S('rect',{x:-26,y:-44,width:52,height:44,rx:9,style:'fill:#B89A6E;stroke:#6E5634;stroke-width:2'},bag);
+  const tA=new Arrow(gH,'c-F',{label:'{T}',off:0,lpos:(x1,y1,x2,y2)=>{const th=aS.get()*DEG;return [(x1+x2)/2-26*Math.sin(th),(y1+y2)/2-26*Math.cos(th)]}}),fA=new Arrow(gH,'c-F',{label:'{f}_k',off:24});
+  const angT=txt(gH,0,0,'','small muted'),angA=S('path',{class:'dim'},gH);
+  const bH=BAR(gH,556,330,240,0,46,32);txt(gH,556,56,'Energy bar chart','strong');
+  /* ---------- QuickCheck 10.13 ---------- */
+  const gQ=S('g',{},svg);
+  const bQ=BAR(gQ,160,300,200,90,70,50);bQ.setScale(4);
+  txt(gQ,500,60,'QuickCheck 10.13: how much work is done by the environment?','strong','middle');
+  /* ---------- side panel ---------- */
+  const mode=ctx.modes([{v:'haul',label:'Hauling up supplies (Example 10.10)'},{v:'qc13',label:'QuickCheck 10.13'}],'haul',v=>setView(v));
+  const hA=Sec(ctx.side,'Try it');
+  const aS=Slider({label:'Slope angle θ',min:10,max:40,step:1,value:25,unit:'°',onInput:()=>reset()});
+  const muS=Slider({label:'Kinetic friction <i>μ</i><sub>k</sub>',min:0,max:0.5,step:0.01,value:0.3,dec:2,onInput:()=>reset()});
+  hA.append(note('A climber pulls a 20 kg bag 7.0 m up a slope at a steady 1.0 m/s. The system is the bag, the slope, and the earth; the rope is part of the environment.'),aS.el,muS.el);
+  const hB=Sec(ctx.side,'Energy principle');
+  const e1=Eq(hB,'<i class="qW">W</i><sub>ext</sub> = <i>T</i>Δ<i>s</i> = {W}','small'),e2=Eq(hB,'Δ<i class="qU">U</i><sub>G</sub> = <i>mg</i>Δ<i>s</i> sin θ = {U}','small'),e3=Eq(hB,'Δ<i class="qE">E</i><sub>th</sub> = <i>f</i><sub>k</sub>Δ<i>s</i> = {E}','small');
+  hB.append(note('The tension is an external force: its work transfers energy into the system. The speed is constant, so '+M('<i>K</i>')+' does not change. The energy goes into '+M('<i>U</i><sub>G</sub>')+' and '+M('<i>E</i><sub>th</sub>')+': '+M('<i>W</i><sub>ext</sub> → <i>U</i><sub>G</sub> + <i>E</i><sub>th</sub>')+'.'),
+    keyIdea('bars on the left of the equals sign are what you start with plus what comes in; bars on the right are where the energy ends up.'));
+  const qA=Sec(ctx.side,'Solve it');
+  Eq(qA,'<i>K</i><sub>i</sub> + <i>U</i><sub>i</sub> + <i>W</i><sub>ext</sub> = <i>K</i><sub>f</sub> + <i>U</i><sub>f</sub> + Δ<i>E</i><sub>th</sub>','small');
+  Eq(qA,'4 J + 1 J + <i>W</i><sub>ext</sub> = 1 J + 2 J + 1 J','small');
+  const reveal=H('button',{type:'button',class:'btn primary',text:'Show the answer'});
+  const qN=note('The system starts with 5 J and ends with 4 J.');
+  reveal.addEventListener('click',()=>{shown=!shown;drawQ()});qA.append(qN,H('div',{style:'margin-top:8px'},reveal));
+  const SIDE={haul:[hA,hB],qc13:[qA]};
+  /* ---------- state ---------- */
+  let V='haul',running=false,s=0,shown=false;
+  const pb=PlayBar(ctx,{onToggle:()=>{if(s>=Ls-1e-9)reset();running=!running;pb.set(running)},onReset:()=>reset()});
+  pb.liveDef([['s','Δ<i>s</i>'],['W','<i>W</i><sub>ext</sub>']]);
+  function drawH(){const th=aS.get()*DEG,mu=muS.get(),ux=Math.cos(th),uy=-Math.sin(th),tx=OX+LsD*PX*ux,ty=OY+LsD*PX*uy;
+    slope.setAttribute('d',`M${OX} ${OY}L${tx.toFixed(1)} ${ty.toFixed(1)}H${(tx+100).toFixed(1)}V${OY}Z`);
+    const bx=OX+(0.4+s)*PX*ux,by=OY+(0.4+s)*PX*uy;bag.setAttribute('transform',`translate(${bx.toFixed(1)},${by.toFixed(1)}) rotate(${(-aS.get()).toFixed(1)})`);
+    const mx=bx-Math.sin(th)*22,my=by-Math.cos(th)*22,fx=tx+62;
+    /* the rope is tied near the top of the bag's front face and runs parallel to the slope all the way to the climber's hands */
+    const nx=-Math.sin(th),ny=-Math.cos(th),ax=bx+ux*26+nx*38,ay=by+uy*26+ny*38;
+    const hx=fx-24,tH=(hx-ax)/ux,hy=ay+uy*tH;   /* where the rope line reaches the climber's hands */
+    rope.setAttribute('points',polyPts([[ax,ay],[hx,hy]]));
+    /* two-segment arms from the shoulder to the hands, elbows bent downward */
+    const arm=(sx,sy,ex,ey,el)=>{const L=el,dx=ex-sx,dy=ey-sy,d=Math.hypot(dx,dy);let mx2=(sx+ex)/2,my2=(sy+ey)/2;
+      if(d<2*L){const hgt=Math.sqrt(L*L-(d/2)**2),px=-dy/d,py=dx/d,sg=py>0?1:-1;mx2+=px*hgt*sg;my2+=py*hgt*sg}return polyPts([[sx,sy],[mx2,my2],[ex,ey]])};
+    const hlx=hx-fx,hly=hy-ty;arm1.setAttribute('points',arm(16,-91,hlx,hly,33));arm2.setAttribute('points',arm(16,-88,hlx+3,hly+4,33));
+    fig.setAttribute('transform',`translate(${fx.toFixed(1)},${ty.toFixed(1)})`);climbT.setAttribute('x',(fx+4).toFixed(1));climbT.setAttribute('y',(ty-102).toFixed(1));
+    {const room=tH-30,len=Math.max(24,Math.min(62,room));tA.set(ax+ux*4,ay+uy*4,ax+ux*(4+len),ay+uy*(4+len))}   /* tension arrow along the rope, from the knot toward the climber */if(mu>0)fA.set(mx-ux*34,my-uy*34,mx-ux*(34+mu*150),my-uy*(34+mu*150));else fA.hide();
+    angA.setAttribute('d',`M${OX+54} ${OY}A54 54 0 0 0 ${(OX+54*ux).toFixed(1)} ${(OY+54*uy).toFixed(1)}`);angT.textContent=aS.get()+'°';
+    if(aS.get()>=22){angT.setAttribute('x',(OX+64).toFixed(1));angT.setAttribute('y',(OY-8).toFixed(1))}else{angT.setAttribute('x',(OX+40).toFixed(1));angT.setAttribute('y',(OY+38).toFixed(1))}
+    const K=0.5*mB*vB*vB,U=mB*g10*s*Math.sin(th),E=mu*mB*g10*Math.cos(th)*s,W=U+E;
+    const Wmax=mB*g10*Ls*(Math.sin(th)+mu*Math.cos(th));bH.setScale(Math.max(Wmax,K));bH.set({Ki:K,Ui:0,W,Kf:K,Uf:U,E});
+    e1.set('W',Jz(W));e2.set('U',Jz(U));e3.set('E',Jz(E));pb.liveSet('s',mfmt(s));pb.liveSet('W',Jz(W))}
+  function reset(){running=false;pb.set(false);s=0;drawH()}
+  function drawQ(){bQ.set({Ki:4,Ui:1,W:shown?-1:0,Kf:1,Uf:2,E:1});if(!shown)bQ.items[2].val.textContent='?';
+    reveal.textContent=shown?'Hide the answer':'Show the answer';qN.innerHTML=shown?'The system starts with 5 J and ends with 4 J, so '+M('<i>W</i><sub>ext</sub> = −1 J')+': one joule left the system as work.':'The system starts with 5 J and ends with 4 J.'}
+  function setView(k){V=k;mode.set(k);gH.style.display=k==='haul'?'':'none';gQ.style.display=k==='qc13'?'':'none';
+    for(const z in SIDE)SIDE[z].forEach(e=>e.hidden=z!==k);[...SIDE[k]].reverse().forEach(e=>ctx.side.prepend(e));
+    [...ctx.bar.children].forEach(c=>c.hidden=k!=='haul');
+    if(k==='haul'){reset();ctx.cap.innerHTML='Bars are energies in joules. As the bag rises, the external work bar grows, and so do the potential and thermal energy bars on the right.'}
+    else{shown=false;drawQ();ctx.cap.innerHTML='A negative bar means energy left the system. Here, the environment did negative work on it.'}
+    relayout(svg)}
+  setView('haul');
+  return {step(dt){if(!running)return;s=Math.min(Ls,s+dt*vB*1.2);if(s>=Ls){running=false;pb.set(false)}drawH()},toggle:()=>pb.el.click(),reset,
+    deactivate(){running=false;pb.set(false)},view:v=>setView(v)};
+}});
+/* ================= 12. Review (summary slides 93-100) ================= */
+tab({id:'review',label:'Review',title:'Chapter 10 summary and questions',page:true,
+lede:'The chapter’s key ideas and equations, each linked to its simulation, plus every Reading Question and QuickCheck from the slides.',
+questions:[],
+build(ctx){
+  const sum=H('div',{class:'sum-grid'}),rq=H('div',{class:'rq-list'}),qc=H('div',{class:'rq-list'});
+  ctx.page.append(sum,rq,qc);
+  const mode=ctx.modes([{v:'sum',label:'Summary'},{v:'rq',label:'Reading Questions'},{v:'qc',label:'QuickChecks'}],'sum',v=>show(v));
+  const link=id=>{const a=H('a',{href:'#'+id,text:'Open topic '+TAB[id].num+': '+TAB[id].label});a.addEventListener('click',e=>{e.preventDefault();showTab(id)});return a};
+  const COLS=[
+    ['General principles',[
+      ['The energy principle revisited','Δ<i>K</i> + Δ<i>U</i> + Δ<i>E</i><sub>th</sub> = <i>W</i><sub>ext</sub>','Energy is transformed within the system and transferred to or from it by external work. Another form: '+M('<i>K</i><sub>f</sub> + <i>U</i><sub>f</sub> + Δ<i>E</i><sub>th</sub> = <i>K</i><sub>i</sub> + <i>U</i><sub>i</sub> + <i>W</i><sub>ext</sub>')+'.','principle'],
+      ['Solving energy problems','Model, visualize, solve, review','Define the system. Draw a before-and-after picture and an energy bar chart. Use the energy principle. Check that the result is reasonable.','conserve'],
+      ['Law of conservation of energy','Δ<i>E</i><sub>sys</sub> = 0','For an isolated system, '+M('<i>W</i><sub>ext</sub> = 0')+', so '+M('<i>E</i><sub>sys</sub> = <i>K</i> + <i>U</i> + <i>E</i><sub>th</sub>')+' is conserved. If it is also nondissipative, '+M('<i>K</i><sub>i</sub> + <i>U</i><sub>i</sub> = <i>K</i><sub>f</sub> + <i>U</i><sub>f</sub>')+'.','conserve']]],
+    ['Important concepts',[
+      ['Potential energy','Δ<i>U</i> = −<i>W</i><sub>int</sub>','Energy stored inside a system by its interaction forces. It is an energy of the system, not of one object.','pe'],
+      ['Force from potential energy','<i>F<sub>s</sub></i> = −d<i>U</i>/d<i>s</i>','The force is the negative of the slope of the potential-energy curve.','force'],
+      ['Energy diagrams','<i>K</i> = <i>E</i> − <i>U</i>','From the axis to the PE curve is '+M('<i>U</i>')+'; from the curve to the TE line is '+M('<i>K</i>')+'. Turning points are where the TE line crosses the PE curve.','diagram'],
+      ['Equilibrium','d<i>U</i>/d<i>s</i> = 0','Minima of the PE curve are points of stable equilibrium; maxima are points of unstable equilibrium.','equil'],
+      ['Conservative forces','<i>W</i><sub>c</sub> is independent of the path','Potential energy exists only for conservative forces such as gravity and springs. Friction’s work depends on the path, so it has none.','cons']]],
+    ['Applications',[
+      ['Gravitational potential energy','<i>U</i><sub>G</sub> = <i>mgy</i>','An energy of the earth + object system. Only changes matter, so you choose where '+M('<i>y</i> = 0')+'.','grav'],
+      ['Speed and height','<i>v</i><sub>f</sub> = √<span class="rad"><i>v</i><sub>i</sub><sup>2</sup> + 2<i>gh</i></span>','With no friction, the speed depends only on the height descended, not on the path.','height'],
+      ['Elastic potential energy','<i>U</i><sub>Sp</sub> = ½<i>k</i>(Δ<i>s</i>)<sup>2</sup>','An energy of the spring + attached objects system, where Δ<i>s</i> is the displacement from equilibrium.','elastic'],
+      ['Friction','Δ<i>E</i><sub>th</sub> = <i>f</i><sub>k</sub>Δ<i>s</i>','Friction turns mechanical energy into thermal energy, so '+M('<i>K</i> + <i>U</i>')+' is not conserved.','friction'],
+      ['Energy bar charts','<i>K</i><sub>i</sub> + <i>U</i><sub>i</sub> + <i>W</i><sub>ext</sub> = <i>K</i><sub>f</sub> + <i>U</i><sub>f</sub> + Δ<i>E</i><sub>th</sub>','The energy principle in graphical form.','principle']]]];
+  COLS.forEach(([h,items])=>{const c=H('div',{class:'sum-col'},H('h3',{text:h}));items.forEach(([t,eq,p,id])=>{c.append(H('div',{class:'sum-item'},H('h4',{text:t}),H('p',{class:'eq',html:eq}),H('p',{html:p}),link(id)))});sum.append(c)});
+  function block(id,kind){const q=Q[id];const b=H('div',{class:'rq'});b.append(H('h4',{class:kind==='qc'?'qc':'',text:q.title}),H('p',{class:'pr',html:q.prompt}));
+    if(q.figure){const f=H('div',{class:'qd-fig'});q.figure(f);b.append(f)}
+    const qb=questionBlock(q);b.append(qb.opts,qb.exp);const row=H('div',{class:'row'},qb.reveal);
+    if(kind==='qc'){const big=H('button',{type:'button',class:'btn',text:'Show large'});big.addEventListener('click',()=>openQ(id,big));row.append(big);
+      if(q.demo){const d=H('button',{type:'button',class:'btn ghost',text:'Show it in the simulation'});d.addEventListener('click',()=>q.demo());row.append(d)}}
+    b.append(row);return b}
+  Object.keys(Q).filter(k=>Q[k].kind==='RQ').forEach(id=>rq.append(block(id,'rq')));
+  Object.keys(Q).filter(k=>Q[k].kind==='QC').forEach(id=>qc.append(block(id,'qc')));
+  function show(v){mode.set(v);sum.hidden=v!=='sum';rq.hidden=v!=='rq';qc.hidden=v!=='qc';relayout(ctx.page)}
+  show('sum');
+  return {activate(){relayout(ctx.page)}};
+}});
+/* ================= questions from the chapter slides ================= */
+function figSvg(f,w,h,label){return S('svg',{viewBox:`0 0 ${w} ${h}`,role:'img','aria-label':label},f)}
+const go=(id,fn)=>()=>{showTab(id);const a=TAB[id]&&TAB[id].api;if(a&&fn)fn(a)};
+/* the potential-energy curve shared by QuickChecks 10.10 to 10.12 */
+function figQC10(f){const s=figSvg(f,520,300,'Potential energy U in joules versus x in meters: up from 1 J at x = 0 to 3 J at 1 m, down to 0 at 2 m, then rising steadily to 5 J at 7 m');
+  const gr=new Graph(s,{x:70,y:40,w:400,h:200,xmin:0,xmax:7,ymin:0,ymax:5,xstep:1,ystep:1,ytitle:'|Energy (J)|',xtitle:'x |(m)|',tsize:22});
+  S('polyline',{points:polyPts([[0,1],[1,3],[2,0],[7,5]].map(([x,u])=>[gr.X(x),gr.Y(u)])),class:'trace',style:'stroke:var(--U)'},gr.plot);
+  mathText(s,'|PE|',{size:22,x:gr.X(6.7),y:gr.Y(4.2),anchor:'end'})}
+defQ('RQ10.1',{kind:'RQ',title:'Reading Question 10.1',prompt:'A particular interaction force does work '+Wint+' inside a system. The potential energy of the interaction is <i>U</i>. Which equation relates <i>U</i> and '+Wint+'?',
+  options:['<i>U</i> = '+Wint,'Δ<i>U</i> = '+Wint,'<i>U</i> = −'+Wint,'Δ<i>U</i> = −'+Wint],answer:'D',
+  explain:'When interaction forces inside the system do work, the potential energy changes by the negative of that work: Δ<i>U</i> = −'+Wint+'. Only <i>changes</i> in potential energy are defined.',demo:go('pe',a=>a.view('two'))});
+defQ('RQ10.2',{kind:'RQ',title:'Reading Question 10.2',prompt:'Gravitational potential energy is',
+  options:['the area under a gravity force-versus-time graph.','the gravitation constant times mass-squared divided by distance-squared.','mass times the acceleration due to gravity times vertical position.','½ mass times speed-squared.','velocity per unit mass.'],answer:'C',
+  explain:Ug+' = <i>mgy</i>, where <i>y</i> is the vertical position measured from a reference level you choose.'});
+defQ('RQ10.3',{kind:'RQ',title:'Reading Question 10.3',prompt:'A method for keeping track of transformations between kinetic energy and gravitational potential energy, introduced in this chapter, is',
+  options:['credit-debit tables.','kinetic energy-versus-time graphs.','energy bar charts.','energy conservation pools.','energy spreadsheets.'],answer:'C',
+  explain:'Energy bar charts show each kind of energy before and after a process, so you can see that the total stays the same.',demo:go('grav',a=>a.view('toss'))});
+defQ('RQ10.4',{kind:'RQ',title:'Reading Question 10.4',prompt:'Mechanical energy is the',
+  options:['energy due to internal moving parts.','energy of motion.','energy of position.','sum of kinetic energy plus potential energy.','sum of kinetic, potential, thermal, and elastic energy.'],answer:'D',
+  explain:'<i>E</i><sub>mech</sub> = <i>K</i> + <i>U</i>. It is conserved in an isolated system with no friction or other dissipative forces.',demo:go('conserve',a=>a.view('pend'))});
+defQ('RQ10.5',{kind:'RQ',title:'Reading Question 10.5',prompt:'For conservative forces, the magnitude of the force is equal to the negative of the derivative of',
+  options:['impulse with respect to position.','kinetic energy with respect to position.','momentum with respect to position.','potential energy with respect to position.','work with respect to position.'],answer:'D',
+  explain:'<i>F<sub>s</sub></i> = −d<i>U</i>/d<i>s</i>: the force is the negative of the slope of the potential-energy curve.',demo:go('force',a=>a.view('spring'))});
+defQ('QC10.1',{kind:'QC',title:'QuickCheck 10.1',prompt:'Rank in order, from largest to smallest, the gravitational potential energies of the balls.',
+  figure(f){const s=figSvg(f,520,260,'Four balls: ball 1 on the ground moving up fast, ball 2 higher moving up, ball 3 highest and at rest, ball 4 at the same height as ball 2 moving down');
+    S('line',{x1:40,x2:480,y1:220,y2:220,class:'ground'},s);
+    [[1,110,205,70],[2,210,140,45],[3,320,62,0],[4,410,140,-45]].forEach(([n,x,y,v])=>{S('circle',{cx:x,cy:y,r:14,class:'obj2'},s);txt(s,x-26,y+7,String(n),'strong','end');
+      if(v)new Arrow(s,'c-v',{w:3.5}).set(x,y-(v>0?18:-18),x,y-(v>0?18:-18)-v);else txt(s,x+24,y+7,'v = 0','small')})},
+  options:[Ug+'1 > '+Ug+'2 = '+Ug+'4 > '+Ug+'3',Ug+'1 > '+Ug+'2 > '+Ug+'3 > '+Ug+'4',Ug+'3 > '+Ug+'2 > '+Ug+'4 > '+Ug+'1',Ug+'3 > '+Ug+'2 = '+Ug+'4 > '+Ug+'1'],answer:'D',
+  explain:Ug+' = <i>mgy</i> depends only on height, not on speed or direction of motion. Ball 3 is highest, balls 2 and 4 are at the same height, and ball 1 is lowest.'});
+defQ('QC10.2',{kind:'QC',title:'QuickCheck 10.2',prompt:'Starting from rest, a marble first rolls down a steeper hill, then down a less steep hill of the same height. For which is it going faster at the bottom? Friction and air resistance are both negligible.',
+  options:['the steeper hill','the less steep hill','It has the same speed at the bottom of both hills.','I can’t answer without knowing the mass of the marble.'],answer:'C',
+  explain:'Both hills give the same drop in height, so the same decrease in '+Ug+' and the same gain in <i>K</i>. The steeper hill only gets there sooner.',demo:go('height',a=>a.view('slides'))});
+defQ('QC10.3',{kind:'QC',title:'QuickCheck 10.3',prompt:'A small child slides down the four frictionless slides A–D. Rank in order, from largest to smallest, her speeds at the bottom.',
+  figure(f){const s=figSvg(f,560,200,'Four slides of the same height: A steep and straight, B less steep and straight, C curving inward, D curving outward');
+    const P={A:[[0,0],[60,140]],B:[[0,0],[120,140]]};
+    ['A','B','C','D'].forEach((n,i)=>{const x0=20+i*138,p=S('path',{class:'thin',style:'stroke-width:3.5'},s);
+      const d=n==='A'?`M${x0} 30L${x0+60} 170`:n==='B'?`M${x0} 30L${x0+120} 170`:n==='C'?`M${x0} 30Q${x0+8} 165 ${x0+110} 170`:`M${x0} 30Q${x0+100} 40 ${x0+110} 170`;
+      p.setAttribute('d',d);S('line',{x1:x0-6,x2:x0+124,y1:170,y2:170,class:'ground'},s);txt(s,x0+56,196,n,'strong','middle')});
+    S('line',{x1:14,x2:14,y1:30,y2:170,class:'dim'},s);txt(s,10,106,'h','small','end')},
+  options:['<i>v</i><sub>D</sub> > <i>v</i><sub>A</sub> > <i>v</i><sub>B</sub> > <i>v</i><sub>C</sub>','<i>v</i><sub>D</sub> > <i>v</i><sub>A</sub> = <i>v</i><sub>B</sub> > <i>v</i><sub>C</sub>','<i>v</i><sub>C</sub> > <i>v</i><sub>A</sub> > <i>v</i><sub>B</sub> > <i>v</i><sub>D</sub>','<i>v</i><sub>A</sub> = <i>v</i><sub>B</sub> = <i>v</i><sub>C</sub> = <i>v</i><sub>D</sub>'],answer:'D',
+  explain:'Her speed at the bottom depends only on the height she descends. All four slides have the same height, so all four speeds are equal, although she reaches the bottom at different times.',demo:go('height',a=>a.view('slides'))});
+defQ('QC10.4',{kind:'QC',title:'QuickCheck 10.4',prompt:'A child is on a playground swing, motionless at the highest point of his arc. What energy transformation takes place as he swings back down to the lowest point of his motion? Air resistance is negligible.',
+  options:['<i>K</i> → '+Ug,Ug+' → <i>K</i>',Eth+' → <i>K</i>',Ug+' → '+Eth,'<i>K</i> → '+Eth],answer:'B',
+  explain:'He loses height, so '+Ug+' decreases, and he speeds up, so <i>K</i> increases.',demo:go('conserve',a=>a.view('pend'))});
+defQ('QC10.5',{kind:'QC',title:'QuickCheck 10.5',prompt:'A skier is gliding down a gentle slope at a constant speed. What energy transformation is taking place?',
+  options:['<i>K</i> → '+Ug,Ug+' → <i>K</i>',Eth+' → <i>K</i>',Ug+' → '+Eth,'<i>K</i> → '+Eth],answer:'D',
+  explain:'Constant speed means <i>K</i> does not change. The skier loses height, so '+Ug+' decreases, and friction warms the skis and snow, so '+Eth+' increases.',demo:go('friction',a=>a.preset('skier'))});
+defQ('QC10.6',{kind:'QC',title:'QuickCheck 10.6',prompt:'A spring-loaded gun shoots a plastic ball with a launch speed of 2.0 m/s. If the spring is compressed twice as far, the ball’s launch speed will be',
+  options:['1.0 m/s','2.0 m/s','2.8 m/s','4.0 m/s','16.0 m/s'],answer:'D',
+  explain:'½<i>mv</i><sup>2</sup> = ½<i>k</i>(Δ<i>s</i>)<sup>2</sup>, so <i>v</i> = Δ<i>s</i>√(<i>k</i>/<i>m</i>). The launch speed is proportional to Δ<i>s</i>: twice the compression gives twice the speed.',demo:go('elastic',a=>a.preset('d2'))});
+defQ('QC10.7',{kind:'QC',title:'QuickCheck 10.7',prompt:'A spring-loaded gun shoots a plastic ball with a launch speed of 2.0 m/s. If the spring is replaced with a new spring having twice the spring constant (but still compressed the same distance), the ball’s launch speed will be',
+  options:['1.0 m/s','2.0 m/s','2.8 m/s','4.0 m/s','16.0 m/s'],answer:'C',
+  explain:'<i>v</i> = Δ<i>s</i>√(<i>k</i>/<i>m</i>) is proportional to √<i>k</i>. Twice the spring constant gives √2 = 1.41 times the speed: 2.8 m/s.',demo:go('elastic',a=>a.preset('k2'))});
+defQ('QC10.8',{kind:'QC',title:'QuickCheck 10.8',prompt:'Three balls are thrown from a cliff with the same speed but at different angles. Which ball has the greatest speed just before it hits the ground? Air resistance is negligible.',
+  figure(f){const s=figSvg(f,520,240,'Three balls thrown from a cliff at the same speed: one upward, one level, one downward');
+    S('path',{d:'M20 60H120V220',style:'fill:var(--rule-2);stroke:var(--ground);stroke-width:3'},s);S('line',{x1:120,x2:500,y1:220,y2:220,class:'ground'},s);
+    [['M120 60Q300 -40 470 220','C',470],['M120 60Q300 50 380 220','B',380],['M120 60Q200 120 280 220','A',280]].forEach(([d,n,x])=>{S('path',{d,class:'dim'},s);S('circle',{cx:x,cy:212,r:8,class:'obj2'},s);txt(s,x,244,n,'strong','middle')})},
+  options:['Ball A','Ball B','Ball C','All balls have the same speed.'],answer:'D',
+  explain:'All three start with the same kinetic energy and fall through the same height, so they gain the same kinetic energy: <i>v</i><sub>f</sub> = √(<i>v</i><sub>0</sub><sup>2</sup> + 2<i>gh</i>) for every ball.',demo:go('height',a=>a.view('cliff'))});
+defQ('QC10.9',{kind:'QC',title:'QuickCheck 10.9',prompt:'A hockey puck sliding on smooth ice at 4 m/s comes to a 1-m-high hill. Will it make it to the top of the hill? Friction and air resistance are negligible.',
+  figure(f){const s=figSvg(f,520,170,'A puck moving at 4 meters per second toward a 1-meter-high hill');
+    S('path',{d:'M20 140H300L380 60H500',class:'thin',style:'stroke-width:3.5'},s);S('rect',{x:110,y:128,width:34,height:12,rx:3,class:'obj2'},s);
+    new Arrow(s,'c-v',{w:3.5}).set(150,112,210,112);txt(s,150,100,'4 m/s','small');S('line',{x1:470,x2:470,y1:60,y2:140,class:'dim'},s);txt(s,478,108,'1 m','small')},
+  options:['Yes.','No.','I can’t answer without knowing the mass of the puck.','I can’t answer without knowing the angle of the hill.'],answer:'B',
+  explain:'To reach the top it needs ½<i>mv</i><sup>2</sup> ≥ <i>mgy</i>, so <i>v</i><sup>2</sup> ≥ 2<i>gy</i> ≈ 20 m<sup>2</sup>/s<sup>2</sup>. It has only (4 m/s)<sup>2</sup> = 16 m<sup>2</sup>/s<sup>2</sup>, so it stops at about 0.82 m and slides back.',demo:go('conserve',a=>a.view('hill'))});
+defQ('QC10.10',{kind:'QC',title:'QuickCheck 10.10',prompt:'A particle with the potential energy shown is moving to the right. It has 1.0 J of kinetic energy at <i>x</i> = 1.0 m. In the region 1.0 m < <i>x</i> < 2.0 m, the particle is',figure:figQC10,
+  options:['speeding up.','slowing down.','moving at constant speed.','I have no idea.'],answer:'A',
+  explain:'<i>U</i> decreases from 1 m to 2 m, so <i>K</i> = <i>E</i> − <i>U</i> increases. Equivalently, the slope of <i>U</i> is negative, so the force <i>F<sub>x</sub></i> = −d<i>U</i>/d<i>x</i> is positive, in the direction of motion.',demo:go('force',a=>a.view('qc'))});
+defQ('QC10.11',{kind:'QC',title:'QuickCheck 10.11',prompt:'A particle with the potential energy shown is moving to the right. It has 1.0 J of kinetic energy at <i>x</i> = 1.0 m. Where is the particle’s turning point?',figure:figQC10,
+  options:['1.0 m','2.0 m','5.0 m','6.0 m','It doesn’t have a turning point.'],answer:'D',
+  explain:'Its total energy is <i>E</i> = <i>U</i> + <i>K</i> = 3 J + 1 J = 4 J. The TE line at 4 J crosses the PE curve at <i>x</i> = 6 m, where <i>K</i> = 0.',demo:go('force',a=>a.view('qc'))});
+defQ('QC10.12',{kind:'QC',title:'QuickCheck 10.12',prompt:'A particle with this potential energy could be in stable equilibrium at <i>x</i> =',figure:figQC10,
+  options:['0.0 m.','1.0 m.','2.0 m.','Either A or C.','Either B or C.'],answer:'C',
+  explain:'Stable equilibrium is at a minimum of the potential-energy curve, at <i>x</i> = 2.0 m. The maximum at 1.0 m would be unstable equilibrium.',demo:go('equil',a=>a.view('su'))});
+defQ('QC10.13',{kind:'QC',title:'QuickCheck 10.13',prompt:'How much work is done by the environment in the process represented by the energy bar chart?',
+  figure(f){const s=figSvg(f,560,280,'Energy bar chart: initial kinetic energy 4 J, initial potential energy 1 J, external work unknown, final kinetic energy 1 J, final potential energy 2 J, thermal energy increase 1 J');
+    const b=new BarEq(s,{x:40,y0:200,up:160,down:60,bw:52,ow:30,labelY:240,lsize:22,fmt:v=>v+' J',items:[{key:'Ki',cls:'K',label:'K_i'},'+',{key:'Ui',cls:'U',label:'U_i'},'+',{key:'W',cls:'n',label:'W_(ext)'},'=',{key:'Kf',cls:'K',label:'K_f'},'+',{key:'Uf',cls:'U',label:'U_f'},'+',{key:'E',cls:'E',label:'ΔE_(th)'}]});
+    b.setScale(4);b.set({Ki:4,Ui:1,W:0,Kf:1,Uf:2,E:1});b.items[2].val.textContent='?'},
+  options:['−2 J','−1 J','0 J','1 J','2 J'],answer:'B',
+  explain:'The system starts with 5 J and ends with 4 J: 4 + 1 + <i>W</i><sub>ext</sub> = 1 + 2 + 1, so <i>W</i><sub>ext</sub> = −1 J. One joule was transferred from the system to the environment as work.',demo:go('principle',a=>a.view('qc13'))});
+/* ================= app shell ================= */
+const APP={current:null};
+function scaffold(t){
+  const sec=H('section',{class:'panel'+(t.page?' is-page':''),id:'panel-'+t.id,role:'tabpanel','aria-labelledby':'nav-'+t.id,hidden:true});
+  const titles=H('div',{class:'p-titles'},H('h2',{class:'p-title',html:t.title}),t.lede?H('p',{class:'p-lede',html:t.lede}):null);
+  const right=H('div',{class:'p-right'});
+  sec.append(H('header',{class:'p-head'},titles,right));
+  const ctx={sec,titles,right,tab:t};
+  if(t.questions&&t.questions.length){
+    const qs=H('div',{class:'p-qs',role:'group','aria-label':'Questions for this topic'});
+    t.questions.forEach(id=>{const q=Q[id];if(!q)return;const b=H('button',{type:'button',class:'chip-q'+(q.kind==='RQ'?' rq':''),text:q.title});b.addEventListener('click',()=>openQ(id,b));qs.append(b)});
+    right.append(qs);
+  }
+  ctx.modes=(options,value,onChange)=>{const s=Seg(options,value,onChange,'View');s.el.classList.add('modes');titles.append(s.el);return s};
+  if(!t.page){
+    const stage=H('div',{class:'stage'}),bar=H('div',{class:'stage-bar'}),cap=H('p',{class:'caption'});
+    const side=H('aside',{class:'side','aria-label':'Controls and equations'});
+    sec.append(H('div',{class:'p-body'},H('div',{class:'stage-col'},stage,bar,cap),side));
+    Object.assign(ctx,{stage,bar,cap,side});
+  }else{const page=H('div',{class:'p-page'});sec.append(page);ctx.page=page}
+  $('#main').append(sec);
+  t.ctx=ctx;
+}
+function showTab(id,focusNav){
+  const t=TAB[id];if(!t)return null;
+  const cur=APP.current;
+  if(cur&&cur!==t){cur.api&&cur.api.deactivate&&cur.api.deactivate();cur.ctx.sec.hidden=true;cur.navBtn.setAttribute('aria-selected','false');cur.navBtn.tabIndex=-1}
+  t.ctx.sec.hidden=false;t.navBtn.setAttribute('aria-selected','true');t.navBtn.tabIndex=0;
+  APP.current=t;
+  if(!t.api)t.api=t.build(t.ctx)||{};
+  relayout(t.ctx.sec);
+  t.api.activate&&t.api.activate();
+  try{history.replaceState(null,'','#'+id)}catch(e){}
+  document.title=t.label+': Interactions and Potential Energy';
+  if(focusNav)t.navBtn.focus();
+  const list=$('#toc');if(list&&list.scrollWidth>list.clientWidth){const r=t.navBtn.getBoundingClientRect(),lr=list.getBoundingClientRect();if(r.left<lr.left||r.right>lr.right)list.scrollLeft+=r.left-lr.left-40}
+  return t.api;
+}
+function stepTab(d){const i=TABS.indexOf(APP.current);showTab(TABS[(i+d+TABS.length)%TABS.length].id)}
+function api(id){if(!TAB[id].api){/* build silently so demos can configure before showing */}return showTab(id)}
+
+/* ---------- questions ---------- */
+function questionBlock(q){
+  const opts=H('div',{class:'qd-opts'});let sel=null,revealed=false;
+  const btns=q.options.map((o,i)=>{const L=String.fromCharCode(65+i);const b=H('button',{type:'button',class:'qd-opt',html:`<span class="L">${L}.</span><span class="o">${o}</span>`});
+    b.addEventListener('click',()=>{if(revealed)return;sel=L;btns.forEach(x=>x.classList.toggle('sel',x===b))});opts.append(b);return b});
+  const exp=H('div',{class:'qd-explain',hidden:true,html:`<p class="qd-ans">Answer: ${q.answer}. ${q.options[q.answer.charCodeAt(0)-65]}</p>${q.explain?'<p>'+q.explain+'</p>':''}`});
+  const reveal=H('button',{type:'button',class:'btn primary',text:'Reveal answer'});
+  reveal.addEventListener('click',()=>{revealed=true;btns.forEach((b,i)=>{const L=String.fromCharCode(65+i);b.classList.toggle('correct',L===q.answer);b.classList.toggle('wrong',L===sel&&L!==q.answer);b.classList.remove('sel');b.setAttribute('aria-disabled','true')});exp.hidden=false;reveal.hidden=true});
+  return {opts,exp,reveal};
+}
+let qReturn=null;
+function openQ(id,from){
+  const q=Q[id];if(!q)return;
+  const d=$('#qd'),inner=d.querySelector('.qd-in');inner.textContent='';
+  qReturn=from||null;
+  const close=H('button',{type:'button',class:'icon-btn','aria-label':'Close question',html:ICON.x});close.addEventListener('click',()=>d.close());
+  inner.append(H('div',{class:'qd-top'},H('h2',{class:'qd-title'+(q.kind==='RQ'?' rq':''),id:'qd-title',text:q.title}),close));
+  inner.append(H('p',{class:'qd-prompt',html:q.prompt}));
+  if(q.figure){const f=H('div',{class:'qd-fig'});q.figure(f);inner.append(f)}
+  const qb=questionBlock(q);inner.append(qb.opts,qb.exp);
+  const foot=H('div',{class:'qd-foot'},qb.reveal);
+  if(q.demo){const b=H('button',{type:'button',class:'btn',text:'Show it in the simulation'});b.addEventListener('click',()=>{d.close();q.demo()});foot.append(b)}
+  const cl=H('button',{type:'button',class:'btn ghost',text:'Close'});cl.addEventListener('click',()=>d.close());foot.append(cl);
+  inner.append(foot);
+  d.showModal();
+  relayout(d);
+  const first=inner.querySelector('.qd-opt');if(first)first.focus();
+}
+
+/* ---------- start ---------- */
+function buildNav(){
+  const list=$('#toc-list');
+  TABS.forEach(t=>{
+    const b=H('button',{type:'button',class:'toc-btn',role:'tab',id:'nav-'+t.id,'aria-controls':'panel-'+t.id,'aria-selected':'false',tabindex:'-1',title:t.num+'. '+t.label},H('span',{class:'n',text:String(t.num)}),H('span',{class:'t',text:t.label}));
+    b.addEventListener('click',()=>showTab(t.id));
+    b.addEventListener('keydown',e=>{const k=e.key;
+      if(k==='ArrowDown'||k==='ArrowRight'){e.preventDefault();stepTab(1);APP.current.navBtn.focus()}
+      else if(k==='ArrowUp'||k==='ArrowLeft'){e.preventDefault();stepTab(-1);APP.current.navBtn.focus()}
+      else if(k==='Home'){e.preventDefault();showTab(TABS[0].id,true)}
+      else if(k==='End'){e.preventDefault();showTab(TABS[TABS.length-1].id,true)}});
+    t.navBtn=b;list.append(H('li',{role:'presentation'},b));
+  });
+}
+function init(){
+  buildNav();TABS.forEach(scaffold);
+  const h=(location.hash||'').slice(1);
+  showTab(TAB[h]?h:TABS[0].id);
+  window.addEventListener('hashchange',()=>{const k=location.hash.slice(1);if(TAB[k]&&TAB[k]!==APP.current)showTab(k)});
+  const d=$('#qd');d.addEventListener('close',()=>{if(qReturn&&qReturn.isConnected)qReturn.focus();qReturn=null});
+  d.addEventListener('click',e=>{if(e.target===d)d.close()});
+  let last=performance.now();
+  const loop=now=>{const dt=Math.min(0.05,(now-last)/1000);last=now;const c=APP.current;if(c&&c.api&&c.api.step)c.api.step(dt);requestAnimationFrame(loop)};
+  requestAnimationFrame(loop);
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{if(APP.current)relayout(APP.current.ctx.sec)});
+  document.addEventListener('keydown',e=>{
+    if($('#qd').open)return;
+    const el=e.target,tag=(el.tagName||'').toLowerCase();
+    const typing=(tag==='input'&&!['range','checkbox','radio','button'].includes(el.type))||tag==='textarea'||tag==='select';
+    if(typing||e.metaKey||e.ctrlKey||e.altKey)return;
+    const c=APP.current&&APP.current.api;
+    if(e.key==='PageDown'){e.preventDefault();stepTab(1)}
+    else if(e.key==='PageUp'){e.preventDefault();stepTab(-1)}
+    else if(e.key===' '&&(el===document.body||tag==='svg'||(el.closest&&el.closest('.stage')))){if(c&&c.toggle){e.preventDefault();c.toggle()}}
+    else if((e.key==='r'||e.key==='R')&&tag!=='button'){if(c&&c.reset){e.preventDefault();c.reset()}}
+  });
+  const app=$('#app'),cb=$('#collapse');
+  const setCompact=b=>{app.classList.toggle('compact',b);cb.setAttribute('aria-pressed',String(b));cb.querySelector('span').textContent=b?'Show topic names':'Hide topic names';cb.title=b?'Show topic names':'Hide topic names';try{localStorage.setItem('ch10-compact',b?'1':'0')}catch(e){}};
+  let pref=false;try{pref=localStorage.getItem('ch10-compact')==='1'}catch(e){}
+  setCompact(pref);
+  cb.addEventListener('click',()=>{setCompact(!app.classList.contains('compact'));setTimeout(()=>APP.current&&relayout(APP.current.ctx.sec),50)});
+}
+init();
+</script>
+</body>
+</html>
